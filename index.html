@@ -743,46 +743,63 @@
 						}
 					}
 
-					/* EGL CUSTOM QUOTE FORM STYLING */
+					/* EGL TWO-COLUMN QUOTE FORM */
 
 #crmWebToEntityForm.zcwf_lblLeft {
     max-width: 1000px !important;
     width: 100% !important;
     margin: 30px auto !important;
-    padding: 45px 55px !important;
+    padding: 40px 45px !important;
     background: #ffffff !important;
     border-radius: 12px !important;
     box-sizing: border-box !important;
 }
 
+/* Form heading */
 #crmWebToEntityForm .zcwf_title {
     color: #0B2239 !important;
     font-size: 26px !important;
     font-weight: 700 !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 28px !important;
 }
 
+/* Make the Zoho form use two columns */
+#crmWebToEntityForm form {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 28px !important;
+    row-gap: 20px !important;
+}
+
+/* Heading spans both columns */
+#crmWebToEntityForm form > .zcwf_title {
+    grid-column: 1 / -1 !important;
+}
+
+/* Each field */
 #crmWebToEntityForm .zcwf_row {
-    margin: 0 0 18px 0 !important;
-    display: flex !important;
-    align-items: center !important;
+    display: block !important;
     width: 100% !important;
+    margin: 0 !important;
 }
 
+/* Labels */
 #crmWebToEntityForm .zcwf_col_lab {
-    width: 28% !important;
-    margin: 0 !important;
-    padding-right: 20px !important;
+    width: 100% !important;
     float: none !important;
+    padding: 0 !important;
+    margin: 0 0 7px 0 !important;
     font-weight: 600 !important;
     color: #0B2239 !important;
 }
 
+/* Field container */
 #crmWebToEntityForm .zcwf_col_fld {
-    width: 72% !important;
+    width: 100% !important;
     float: none !important;
 }
 
+/* Inputs */
 #crmWebToEntityForm .zcwf_col_fld input[type="text"],
 #crmWebToEntityForm .zcwf_col_fld input[type="email"],
 #crmWebToEntityForm .zcwf_col_fld input[type="tel"],
@@ -791,9 +808,9 @@
 #crmWebToEntityForm .zcwf_col_fld select,
 #crmWebToEntityForm .zcwf_col_fld textarea {
     width: 100% !important;
-	max-width: none !important;
-min-height: 46px !important;
-float: none !important;
+    max-width: none !important;
+    min-height: 46px !important;
+    float: none !important;
     padding: 12px 14px !important;
     border: 1px solid #ccd5dd !important;
     border-radius: 7px !important;
@@ -803,11 +820,13 @@ float: none !important;
     box-sizing: border-box !important;
 }
 
+/* Larger description boxes */
 #crmWebToEntityForm .zcwf_col_fld textarea {
-    min-height: 90px !important;
+    min-height: 95px !important;
     resize: vertical !important;
 }
 
+/* Submit button */
 #crmWebToEntityForm .formsubmit {
     background: #00A6A6 !important;
     color: #ffffff !important;
@@ -823,24 +842,17 @@ float: none !important;
     background: #0B2239 !important;
 }
 
+/* Mobile */
 @media (max-width: 700px) {
+
     #crmWebToEntityForm.zcwf_lblLeft {
-        padding: 20px !important;
+        padding: 25px 20px !important;
     }
 
-    #crmWebToEntityForm .zcwf_row {
-        display: block !important;
-    }
-
-    #crmWebToEntityForm .zcwf_col_lab,
-    #crmWebToEntityForm .zcwf_col_fld {
-        width: 100% !important;
-        float: none !important;
-    }
-
-    #crmWebToEntityForm .zcwf_col_lab {
-        padding-right: 0 !important;
-        margin-bottom: 7px !important;
+    #crmWebToEntityForm form {
+        grid-template-columns: 1fr !important;
+        column-gap: 0 !important;
+        row-gap: 18px !important;
     }
 }
 				</style>
