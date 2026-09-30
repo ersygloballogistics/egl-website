@@ -3,583 +3,499 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Ersy Global Logistics | Procurement, Freight & Fulfillment</title>
-
-  <meta name="description"
-        content="Ersy Global Logistics provides procurement, international sourcing, freight forwarding, warehousing and fulfillment solutions for businesses worldwide.">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      color: #0B2239;
-      background: #ffffff;
-      line-height: 1.6;
-    }
-
-    .container {
-      width: min(1180px, 90%);
-      margin: auto;
-    }
-
-    /* HEADER */
-
-    header {
-      background: #ffffff;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-    }
-
-    nav {
-      min-height: 82px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 30px;
-    }
-
-    .brand {
-      font-size: 26px;
-      font-weight: 800;
-      color: #0B2239;
-      text-decoration: none;
-    }
-
-    .brand span {
-      color: #00A6A6;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .nav-links a {
-      color: #0B2239;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .nav-links a:hover {
-      color: #00A6A6;
-    }
-
-    .quote-btn {
-      background: #00A6A6;
-      color: #ffffff !important;
-      padding: 12px 20px;
-      border-radius: 6px;
-    }
-
-    /* HERO */
-
-    .hero {
-      min-height: 670px;
-      background:
-        linear-gradient(105deg, rgba(11,34,57,.97), rgba(11,34,57,.82)),
-        linear-gradient(135deg, #0B2239, #123e55);
-      color: white;
-      display: flex;
-      align-items: center;
-    }
-
-    .hero-content {
-      max-width: 780px;
-      padding: 90px 0;
-    }
-
-    .eyebrow {
-      color: #58dddd;
-      font-size: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: clamp(44px, 6vw, 76px);
-      line-height: 1.06;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 span {
-      color: #42d0d0;
-    }
-
-    .hero h2 {
-      font-size: clamp(20px, 3vw, 29px);
-      font-weight: 500;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      max-width: 680px;
-      color: #d9e5ea;
-      font-size: 18px;
-      margin-bottom: 34px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 25px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .btn-primary {
-      background: #00A6A6;
-      color: white;
-    }
-
-    .btn-secondary {
-      border: 1px solid rgba(255,255,255,.55);
-      color: white;
-    }
-
-    /* SECTIONS */
-
-    section {
-      padding: 90px 0;
-    }
-
-    .section-heading {
-      text-align: center;
-      max-width: 750px;
-      margin: 0 auto 50px;
-    }
-
-    .section-heading small {
-      color: #00A6A6;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    .section-heading h2 {
-      font-size: 38px;
-      margin: 10px 0 15px;
-    }
-
-    .section-heading p {
-      color: #647482;
-    }
-
-    /* SERVICES */
-
-    .services {
-      background: #f5f8fa;
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .service-card {
-      background: white;
-      padding: 35px;
-      border-radius: 10px;
-      border-top: 4px solid #00A6A6;
-      box-shadow: 0 8px 30px rgba(11,34,57,.07);
-    }
-
-    .service-card h3 {
-      margin-bottom: 12px;
-      font-size: 21px;
-    }
-
-    .service-card p {
-      color: #647482;
-      font-size: 15px;
-    }
-
-    /* WHY EGL */
-
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .why-text h2 {
-      font-size: 40px;
-      margin-bottom: 20px;
-    }
-
-    .why-text p {
-      color: #647482;
-      margin-bottom: 24px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .feature {
-      padding: 17px;
-      background: #f5f8fa;
-      border-radius: 7px;
-      font-weight: 700;
-    }
-
-    .process-box {
-      background: #0B2239;
-      color: white;
-      border-radius: 12px;
-      padding: 40px;
-    }
-
-    .process-box h3 {
-      color: #53dada;
-      margin-bottom: 20px;
-    }
-
-    .process-step {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,.15);
-    }
-
-    /* CTA */
-
-    .cta {
-      background: #00A6A6;
-      color: white;
-      text-align: center;
-    }
-
-    .cta h2 {
-      font-size: 40px;
-      margin-bottom: 15px;
-    }
-
-    .cta p {
-      max-width: 650px;
-      margin: 0 auto 28px;
-    }
-
-    .cta .btn {
-      background: #0B2239;
-      color: white;
-    }
-
-    /* FOOTER */
-
-    footer {
-      background: #071725;
-      color: #b9c6ce;
-      padding: 50px 0 25px;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 50px;
-      margin-bottom: 40px;
-    }
-
-    footer h3,
-    footer h4 {
-      color: white;
-      margin-bottom: 15px;
-    }
-
-    footer a {
-      color: #b9c6ce;
-      text-decoration: none;
-      display: block;
-      margin: 8px 0;
-    }
-
-    footer a:hover {
-      color: #53dada;
-    }
-
-    .copyright {
-      border-top: 1px solid rgba(255,255,255,.1);
-      padding-top: 22px;
-      font-size: 13px;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 850px) {
-      .nav-links a:not(.quote-btn) {
-        display: none;
-      }
-
-      .service-grid,
-      .why-grid,
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        min-height: 580px;
-      }
-    }
-  </style>
+  <title>myEGL Portal | Ersy Global Logistics</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased flex flex-col min-h-screen">
 
-<body>
-
-<header>
-  <div class="container">
-    <nav>
-      <a class="brand" href="#">EGL<span>.</span></a>
-
-      <div class="nav-links">
-        <a href="#services">Services</a>
-        <a href="#about">About EGL</a>
-        <a href="#process">How It Works</a>
-        <a href="mailto:sales@ersygloballogistics.com">Contact</a>
-        <a class="quote-btn" href="mailto:sales@ersygloballogistics.com?subject=Request%20a%20Quote">
-          Request a Quote
-        </a>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main>
-
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-
-        <div class="eyebrow">
-          Procurement · Freight · Fulfillment
-        </div>
-
-        <h1>
-          Global Logistics.<br>
-          <span>One Connected Solution.</span>
-        </h1>
-
-        <h2>Source. Purchase. Ship. Store. Deliver.</h2>
-
-        <p>
-          Ersy Global Logistics helps businesses manage procurement,
-          international sourcing, freight forwarding, warehousing and
-          fulfillment through one coordinated logistics solution.
-        </p>
-
-        <div class="hero-buttons">
-          <a class="btn btn-primary"
-             href="mailto:sales@ersygloballogistics.com?subject=Request%20a%20Quote">
-             Request a Quote
-          </a>
-
-          <a class="btn btn-secondary" href="#services">
-            Explore Our Services
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <section id="services" class="services">
-    <div class="container">
-
-      <div class="section-heading">
-        <small>What We Do</small>
-        <h2>End-to-End Supply Chain Solutions</h2>
-        <p>
-          From finding the right supplier to delivering the final order,
-          EGL coordinates the critical stages of your supply chain.
-        </p>
-      </div>
-
-      <div class="service-grid">
-
-        <div class="service-card">
-          <h3>Procurement & Sourcing</h3>
-          <p>
-            Supplier sourcing, RFQs, quotation comparison, negotiation
-            and procurement coordination.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>International Purchasing</h3>
-          <p>
-            Purchase coordination, supplier communication and international
-            order management.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Freight Forwarding</h3>
-          <p>
-            Air, sea and road freight coordination with routing,
-            carrier selection and shipment management.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Customs Coordination</h3>
-          <p>
-            Support with shipping documentation and coordination with
-            appropriate customs-clearance partners.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>EGL Fulfillment Services</h3>
-          <p>
-            Warehousing coordination, inventory management, pick & pack,
-            order fulfillment and returns.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Last-Mile Delivery</h3>
-          <p>
-            Coordinated final delivery solutions from warehouse or
-            destination hub to your customer.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <section id="about">
-    <div class="container">
-      <div class="why-grid">
-
-        <div class="why-text">
-          <div class="eyebrow" style="color:#00A6A6;">
-            Why EGL
-          </div>
-
-          <h2>One Partner Across Your Logistics Journey</h2>
-
-          <p>
-            Instead of coordinating multiple disconnected providers,
-            EGL gives businesses one point of coordination across sourcing,
-            purchasing, transportation and fulfillment.
-          </p>
-
-          <div class="features">
-            <div class="feature">Global Supplier Sourcing</div>
-            <div class="feature">Multi-Modal Freight</div>
-            <div class="feature">Cost Visibility</div>
-            <div class="feature">Shipment Coordination</div>
-            <div class="feature">Flexible Fulfillment</div>
-            <div class="feature">Business Support</div>
+  <!-- TOP HEADER / NAVIGATION -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand / Logo -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+          <div class="bg-blue-600 p-2 rounded-lg text-white font-black tracking-widest text-xl">EGL</div>
+          <div>
+            <span class="font-bold text-lg tracking-tight block">ERSY GLOBAL LOGISTICS</span>
+            <span class="text-xs text-blue-400 font-medium block -mt-1">myEGL Digital Portal</span>
           </div>
         </div>
 
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex space-x-1">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-md text-sm font-medium bg-slate-800 text-white">Dashboard</button>
+          <button onclick="switchTab('quotes')" id="nav-quotes" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">My Quotes</button>
+          <button onclick="switchTab('purchases')" id="nav-purchases" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Purchases (SOP A)</button>
+          <button onclick="switchTab('shipments')" id="nav-shipments" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Shipments (SOP B/C)</button>
+          <button onclick="switchTab('fulfillment')" id="nav-fulfillment" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">Fulfillment (SOP D)</button>
+        </nav>
 
-        <div class="process-box" id="process">
-          <h3>The EGL Journey</h3>
+        <!-- Right Side Actions -->
+        <div class="flex items-center space-x-3">
+          <button onclick="openBookingModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md text-sm transition-colors flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> New Request
+          </button>
+          <div class="border-l border-slate-700 h-6 mx-1"></div>
+          <div class="flex items-center space-x-2 text-xs text-slate-300">
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono">MVP Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-          <div class="process-step">01 — Tell us what you need</div>
-          <div class="process-step">02 — We source or plan the solution</div>
-          <div class="process-step">03 — Receive and approve your quotation</div>
-          <div class="process-step">04 — EGL coordinates purchasing & shipping</div>
-          <div class="process-step">05 — Customs, storage or fulfillment</div>
-          <div class="process-step">06 — Final delivery & completion</div>
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- VIEW 1: DASHBOARD OVERVIEW -->
+    <section id="view-dashboard" class="tab-view space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Control Tower Dashboard</h1>
+          <p class="text-slate-500 text-sm">Real-time status across all active EGL master references.</p>
+        </div>
+        <div class="text-xs bg-white border border-slate-200 px-3 py-2 rounded-lg shadow-sm">
+          Master ID Format: <code class="text-blue-600 font-bold">EGL-YYMM-####</code>
+        </div>
+      </div>
+
+      <!-- Metrics Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
+          <div>
+            <p class="text-xs text-slate-500 font-medium uppercase">Active Sourcing POs</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1">12</p>
+            <span class="text-xs text-emerald-600 font-medium">Workflow A Active</span>
+          </div>
+          <div class="p-3 bg-amber-50 rounded-lg text-amber-600"><i data-lucide="shopping-bag" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
+          <div>
+            <p class="text-xs text-slate-500 font-medium uppercase">Active Shipments</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1">28</p>
+            <span class="text-xs text-blue-600 font-medium">Workflow B/C Freight</span>
+          </div>
+          <div class="p-3 bg-blue-50 rounded-lg text-blue-600"><i data-lucide="truck" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
+          <div>
+            <p class="text-xs text-slate-500 font-medium uppercase">Warehouse On-Hand</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1">1,420 <span class="text-xs text-slate-400 font-normal">SKUs</span></p>
+            <span class="text-xs text-indigo-600 font-medium">Workflow D Inventory</span>
+          </div>
+          <div class="p-3 bg-indigo-50 rounded-lg text-indigo-600"><i data-lucide="warehouse" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex justify-between items-center">
+          <div>
+            <p class="text-xs text-slate-500 font-medium uppercase">Pending Approvals</p>
+            <p class="text-2xl font-bold text-amber-600 mt-1">3 Quotes</p>
+            <span class="text-xs text-amber-600 font-medium">Payment/Quote Gates</span>
+          </div>
+          <div class="p-3 bg-rose-50 rounded-lg text-rose-600"><i data-lucide="shield-alert" class="w-6 h-6"></i></div>
+        </div>
+      </div>
+
+      <!-- Quick Search / Track & Trace Bar -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <h2 class="text-sm font-semibold uppercase text-slate-500 tracking-wider mb-3">Track Master Reference</h2>
+        <div class="flex gap-2">
+          <div class="relative flex-grow">
+            <i data-lucide="search" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+            <input type="text" id="masterSearch" placeholder="Enter EGL Ref ID (e.g., EGL-2609-1002)..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm">
+          </div>
+          <button onclick="searchMasterRef()" class="bg-slate-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-800">Search</button>
+        </div>
+      </div>
+
+      <!-- Master Records Table -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex justify-between items-center">
+          <h3 class="font-bold text-slate-800">Active EGL Master Jobs</h3>
+          <span class="text-xs text-slate-500">Auto-synced with Back-Office CRM</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-600">
+            <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+              <tr>
+                <th class="px-6 py-3">Master ID</th>
+                <th class="px-6 py-3">Service Type</th>
+                <th class="px-6 py-3">Origin / Destination</th>
+                <th class="px-6 py-3">Gate Status</th>
+                <th class="px-6 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody id="masterTableBody" class="divide-y divide-slate-100">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUOTES & APPROVALS -->
+    <section id="view-quotes" class="tab-view hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Quotes & Payment Gates</h1>
+          <p class="text-slate-500 text-sm">Review, approve quotations, and manage financial control gates.</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+            <tr>
+              <th class="px-6 py-3">Quote Ref</th>
+              <th class="px-6 py-3">Master Reference</th>
+              <th class="px-6 py-3">Scope Description</th>
+              <th class="px-6 py-3">Total Cost</th>
+              <th class="px-6 py-3">Payment Gate</th>
+              <th class="px-6 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="quotesTableBody" class="divide-y divide-slate-100">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PURCHASES & SOURCING (SOP A) -->
+    <section id="view-purchases" class="tab-view hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Procurement & Sourcing (SOP A)</h1>
+          <p class="text-slate-500 text-sm">Track RFQs, PO Approvals, and Supplier Readiness.</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-xs">
+          <strong>Rule 1:</strong> Supplier bank-detail changes require independent verification before payment.
+        </div>
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-xs">
+          <strong>Rule 2:</strong> Material spec, price, or date changes require customer sign-off.
+        </div>
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-xs">
+          <strong>Rule 3:</strong> Zero substitution of product/supplier without explicit written approval.
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+            <tr>
+              <th class="px-6 py-3">PO Reference</th>
+              <th class="px-6 py-3">Supplier Name</th>
+              <th class="px-6 py-3">SKU / Quantity</th>
+              <th class="px-6 py-3">Ready Date</th>
+              <th class="px-6 py-3">SOP A Stage</th>
+            </tr>
+          </thead>
+          <tbody id="purchasesTableBody" class="divide-y divide-slate-100">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 4: SHIPMENTS (SOP B/C) -->
+    <section id="view-shipments" class="tab-view hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Freight Forwarding & E2E (SOP B & C)</h1>
+          <p class="text-slate-500 text-sm">Milestones, customs status, and POD documentation[cite: 1].</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+            <tr>
+              <th class="px-6 py-3">Shipment Ref</th>
+              <th class="px-6 py-3">Mode / Incoterm</th>
+              <th class="px-6 py-3">Route</th>
+              <th class="px-6 py-3">Current Milestone</th>
+              <th class="px-6 py-3">Customs Docs</th>
+            </tr>
+          </thead>
+          <tbody id="shipmentsTableBody" class="divide-y divide-slate-100">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 5: FULFILLMENT (SOP D) -->
+    <section id="view-fulfillment" class="tab-view hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Warehouse & Fulfillment Services (SOP D)</h1>
+          <p class="text-slate-500 text-sm">Real-time inventory levels, outbound picking, and dispatch[cite: 1].</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
+        <h3 class="font-bold text-slate-800 mb-4">Inventory Location & Stock Overview</h3>
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-500">
+            <tr>
+              <th class="px-4 py-3">SKU Code</th>
+              <th class="px-4 py-3">Description</th>
+              <th class="px-4 py-3">Bin Location</th>
+              <th class="px-4 py-3">On-Hand</th>
+              <th class="px-4 py-3">Allocated</th>
+              <th class="px-4 py-3">Available</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody" class="divide-y divide-slate-100">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: NEW REQUEST INTAKE -->
+  <div id="bookingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl max-w-2xl w-full mx-4 shadow-2xl overflow-hidden">
+      <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+        <div>
+          <h3 class="font-bold text-lg">Submit Request (Intake Stage)</h3>
+          <p class="text-xs text-blue-400">Generates a unique EGL Reference Number[cite: 1]</p>
+        </div>
+        <button onclick="closeBookingModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+      <form id="intakeForm" onsubmit="handleIntakeSubmit(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">EGL Service Workflow</label>
+          <select id="serviceType" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500" required>
+            <option value="Sourcing & Purchasing (SOP A)">Workflow A: Sourcing & Purchasing</option>
+            <option value="Freight Forwarding (SOP B)">Workflow B: Freight Forwarding</option>
+            <option value="End-to-End EGL (SOP C)">Workflow C: End-to-End (Source -> Deliver)</option>
+            <option value="Fulfillment Services (SOP D)">Workflow D: EGL Fulfillment & Storage</option>
+          </select>
         </div>
 
-      </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Origin Location</label>
+            <input type="text" id="origin" placeholder="e.g. Shenzhen, China" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Destination Location</label>
+            <input type="text" id="destination" placeholder="e.g. Dubai, UAE" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Cargo Specs / Product Description</label>
+          <textarea id="cargoSpecs" rows="3" placeholder="Enter SKU requirements, dimensions, weight, quantities, or specific Incoterms..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" required></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-slate-200 flex justify-end space-x-3">
+          <button type="button" onclick="closeBookingModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Generate EGL Reference</button>
+        </div>
+      </form>
     </div>
-  </section>
-
-
-  <section class="cta">
-    <div class="container">
-
-      <h2>Ready to Move Your Business Forward?</h2>
-
-      <p>
-        Tell us what you need sourced, purchased, shipped or fulfilled
-        and let EGL coordinate the journey.
-      </p>
-
-      <a class="btn"
-         href="mailto:sales@ersygloballogistics.com?subject=EGL%20Quote%20Request">
-         Request Your Quote
-      </a>
-
-    </div>
-  </section>
-
-</main>
-
-
-<footer>
-  <div class="container">
-
-    <div class="footer-grid">
-
-      <div>
-        <h3>ERSY GLOBAL LOGISTICS</h3>
-        <p>Source. Purchase. Ship. Store. Deliver.</p>
-        <p style="margin-top:12px;">
-          Integrated procurement, freight and fulfillment solutions.
-        </p>
-      </div>
-
-      <div>
-        <h4>Services</h4>
-        <a href="#services">Procurement</a>
-        <a href="#services">Freight Forwarding</a>
-        <a href="#services">Fulfillment</a>
-        <a href="#services">Last-Mile Delivery</a>
-      </div>
-
-      <div>
-        <h4>Contact</h4>
-        <a href="mailto:sales@ersygloballogistics.com">
-          sales@ersygloballogistics.com
-        </a>
-        <a href="mailto:info@ersygloballogistics.com">
-          info@ersygloballogistics.com
-        </a>
-      </div>
-
-    </div>
-
-    <div class="copyright">
-      © 2026 Ersy Global Logistics. All rights reserved.
-    </div>
-
   </div>
-</footer>
 
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-6 text-xs text-center">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p>&copy; 2026 Ersy Global Logistics. All Rights Reserved. Operating Blueprint & SOP v1.0[cite: 1].</p>
+      <div class="flex space-x-4 font-mono text-slate-500">
+        <span>SOP-A</span><span>•</span><span>SOP-B</span><span>•</span><span>SOP-C</span><span>•</span><span>SOP-D</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CORE APPLICATION JS LOGIC -->
+  <script>
+    // Initial State Data following Blueprint Guidelines
+    const state = {
+      masters: [
+        { id: 'EGL-2609-1001', service: 'End-to-End EGL (SOP C)', origin: 'Ningbo, CN', destination: 'Jebel Ali, UAE', status: 'Payment Gate Cleared', quoteRef: 'EGL-2609-1001-Q01' },
+        { id: 'EGL-2609-1002', service: 'Sourcing & Purchasing (SOP A)', origin: 'Guangzhou, CN', destination: 'Dubai South, UAE', status: 'Pending Deposit', quoteRef: 'EGL-2609-1002-Q01' },
+        { id: 'EGL-2609-1003', service: 'Freight Forwarding (SOP B)', origin: 'Frankfurt, DE', destination: 'DXB Airport, UAE', status: 'In-Transit', quoteRef: 'EGL-2609-1003-Q01' }
+      ],
+      quotes: [
+        { id: 'EGL-2609-1001-Q01', masterId: 'EGL-2609-1001', desc: '1000 Units Electronics Sourcing + Ocean Freight', amount: '$14,200', gate: 'Deposit Confirmed', status: 'Approved' },
+        { id: 'EGL-2609-1002-Q01', masterId: 'EGL-2609-1002', desc: 'Industrial Machine RFQ Sourcing Fee + Inspection', amount: '$3,800', gate: 'Pending 50% Deposit', status: 'Awaiting Sign-off' }
+      ],
+      purchases: [
+        { id: 'EGL-2609-1001-P001', supplier: 'Shenzhen Tech Corp', sku: 'SKU-8829 (1000 Units)', readyDate: '2026-10-15', stage: 'Stage 9: Supplier Confirmed' },
+        { id: 'EGL-2609-1002-P001', supplier: 'Bavaria Tooling GmbH', sku: 'SKU-1044 (2 Units)', readyDate: '2026-10-20', stage: 'Stage 3: RFQ In Progress' }
+      ],
+      shipments: [
+        { id: 'EGL-2609-1001-S01', mode: 'Ocean FCL / DDP', route: 'Ningbo -> Jebel Ali', milestone: 'Stage 7: In Transit (Vessel)', docs: 'BL / Packing List Verified' },
+        { id: 'EGL-2609-1003-S01', mode: 'Air Freight / CIP', route: 'FRA -> DXB', milestone: 'Stage 9: Customs Clearance', docs: 'AWB Issued' }
+      ],
+      inventory: [
+        { sku: 'EGL-SKU-9901', desc: 'High-Density Solar Inverters', location: 'BIN-A12-04', onHand: 450, allocated: 50, available: 400 },
+        { sku: 'EGL-SKU-9902', desc: 'Lithium Battery Modules 48V', location: 'BIN-C02-01', onHand: 200, allocated: 0, available: 200 }
+      ]
+    };
+
+    // Tab Switching Mechanism
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(view => view.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-800', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if(activeNav) {
+        activeNav.classList.add('bg-slate-800', 'text-white');
+        activeNav.classList.remove('text-slate-300');
+      }
+    }
+
+    // Modal Operations
+    function openBookingModal() { document.getElementById('bookingModal').classList.remove('hidden'); }
+    function closeBookingModal() { document.getElementById('bookingModal').classList.add('hidden'); }
+
+    // Render All Tables
+    function renderTables() {
+      // Master Table
+      const masterBody = document.getElementById('masterTableBody');
+      masterBody.innerHTML = state.masters.map(m => `
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="px-6 py-4 font-mono font-bold text-blue-600">${m.id}</td>
+          <td class="px-6 py-4 font-medium text-slate-800">${m.service}</td>
+          <td class="px-6 py-4">${m.origin} &rarr; ${m.destination}</td>
+          <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs font-semibold rounded-full ${m.status.includes('Cleared') || m.status.includes('Transit') ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${m.status}</span></td>
+          <td class="px-6 py-4"><button onclick="alert('Viewing Master Details for ${m.id}')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium">Details</button></td>
+        </tr>
+      `).join('');
+
+      // Quotes Table
+      const quotesBody = document.getElementById('quotesTableBody');
+      quotesBody.innerHTML = state.quotes.map(q => `
+        <tr>
+          <td class="px-6 py-4 font-mono text-slate-800 font-bold">${q.id}</td>
+          <td class="px-6 py-4 font-mono text-xs text-blue-600">${q.masterId}</td>
+          <td class="px-6 py-4">${q.desc}</td>
+          <td class="px-6 py-4 font-bold text-slate-900">${q.amount}</td>
+          <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full ${q.gate.includes('Confirmed') ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">${q.gate}</span></td>
+          <td class="px-6 py-4">
+            ${q.status === 'Approved' ? '<span class="text-xs font-bold text-emerald-600">✓ Approved</span>' : `<button onclick="approveQuote('${q.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium hover:bg-blue-700">Approve & Pay</button>`}
+          </td>
+        </tr>
+      `).join('');
+
+      // Purchases Table
+      const purchasesBody = document.getElementById('purchasesTableBody');
+      purchasesBody.innerHTML = state.purchases.map(p => `
+        <tr>
+          <td class="px-6 py-4 font-mono font-bold text-slate-800">${p.id}</td>
+          <td class="px-6 py-4">${p.supplier}</td>
+          <td class="px-6 py-4">${p.sku}</td>
+          <td class="px-6 py-4 font-mono text-xs">${p.readyDate}</td>
+          <td class="px-6 py-4"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-medium">${p.stage}</span></td>
+        </tr>
+      `).join('');
+
+      // Shipments Table
+      const shipmentsBody = document.getElementById('shipmentsTableBody');
+      shipmentsBody.innerHTML = state.shipments.map(s => `
+        <tr>
+          <td class="px-6 py-4 font-mono font-bold text-slate-800">${s.id}</td>
+          <td class="px-6 py-4">${s.mode}</td>
+          <td class="px-6 py-4">${s.route}</td>
+          <td class="px-6 py-4"><span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md text-xs font-medium">${s.milestone}</span></td>
+          <td class="px-6 py-4 text-xs font-mono text-slate-500">${s.docs}</td>
+        </tr>
+      `).join('');
+
+      // Inventory Table
+      const inventoryBody = document.getElementById('inventoryTableBody');
+      inventoryBody.innerHTML = state.inventory.map(i => `
+        <tr>
+          <td class="px-4 py-3 font-mono font-bold text-blue-600">${i.sku}</td>
+          <td class="px-4 py-3">${i.desc}</td>
+          <td class="px-4 py-3 font-mono text-xs bg-slate-50">${i.location}</td>
+          <td class="px-4 py-3 font-bold">${i.onHand}</td>
+          <td class="px-4 py-3 text-amber-600">${i.allocated}</td>
+          <td class="px-4 py-3 text-emerald-600 font-bold">${i.available}</td>
+        </tr>
+      `).join('');
+    }
+
+    // New Request Submission
+    function handleIntakeSubmit(e) {
+      e.preventDefault();
+      const service = document.getElementById('serviceType').value;
+      const origin = document.getElementById('origin').value;
+      const destination = document.getElementById('destination').value;
+      const specs = document.getElementById('cargoSpecs').value;
+
+      // Auto-generate Master Ref convention EGL-YYMM-####
+      const date = new Date();
+      const yy = date.getFullYear().toString().slice(-2);
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const random = Math.floor(1000 + Math.random() * 9000);
+      const masterId = `EGL-${yy}${mm}-${random}`;
+
+      // Push new record
+      state.masters.unshift({
+        id: masterId,
+        service: service,
+        origin: origin,
+        destination: destination,
+        status: 'Intake Complete / Pending Quote',
+        quoteRef: `${masterId}-Q01`
+      });
+
+      state.quotes.unshift({
+        id: `${masterId}-Q01`,
+        masterId: masterId,
+        desc: specs,
+        amount: 'Calculating Margin...',
+        gate: 'Pending Commercial Quote',
+        status: 'Under Review'
+      });
+
+      renderTables();
+      closeBookingModal();
+      document.getElementById('intakeForm').reset();
+      alert(`Success! Generated EGL Master Reference ID: ${masterId}`);
+    }
+
+    // Quote Approval Action
+    function approveQuote(quoteId) {
+      const q = state.quotes.find(item => item.id === quoteId);
+      if(q) {
+        q.status = 'Approved';
+        q.gate = 'Deposit Confirmed';
+        
+        const m = state.masters.find(item => item.id === q.masterId);
+        if(m) m.status = 'Payment Gate Cleared';
+        
+        renderTables();
+        alert(`Quote ${quoteId} approved! Back-office system will now release Purchase Order / Booking.`);
+      }
+    }
+
+    // Quick Search Tracking Function
+    function searchMasterRef() {
+      const query = document.getElementById('masterSearch').value.trim().toUpperCase();
+      if(!query) return;
+      const found = state.masters.find(m => m.id === query);
+      if(found) {
+        alert(`Master Job Found!\n\nID: ${found.id}\nService: ${found.service}\nStatus: ${found.status}\nRoute: ${found.origin} -> ${found.destination}`);
+      } else {
+        alert(`No master record found matching '${query}'. Use convention EGL-YYMM-####.`);
+      }
+    }
+
+    // Initialize application
+    window.onload = () => {
+      lucide.createIcons();
+      renderTables();
+    };
+  </script>
 </body>
 </html>
