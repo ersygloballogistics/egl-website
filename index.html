@@ -580,7 +580,7 @@
    - Code lines with comments Do not remove this code are required for the form to work properly, make sure that you do not remove these lines of code. 
    - The Mandatory check script can modified as to suit your business needs. 
    - It is important that you test the modified form before going live.-->
-<div id = 'crmWebToEntityForm' class = 'zcwf_lblLeft crmWebToEntityForm' style = 'background-color: white;color: black;max-width: 600px;'>
+<div id = 'crmWebToEntityForm' class = 'zcwf_lblLeft crmWebToEntityForm' style = 'background-color: white;color: black;max-width: 1200px;'>
 	<meta name = 'viewport' content = 'width=device-width, initial-scale=1.0'>
 		<META HTTP-EQUIV = 'content-type' CONTENT = 'text/html;charset=UTF-8'>
 			<form id = 'webform11609000000223011' action = 'https://crm.zoho.ae/crm/WebToLeadForm' name = WebToLeads11609000000223011 method = 'POST' onSubmit = 'javascript:document.charset="UTF-8"; return checkMandatory11609000000223011()' accept-charset = 'UTF-8'>
@@ -766,8 +766,102 @@
 							width: 40%;
 						}
 					}
+					/* ===== EGL CUSTOM QUOTE FORM ===== */
+
+#crmWebToEntityForm {
+    max-width: 1100px !important;
+    width: 100% !important;
+    margin: 30px auto !important;
+    padding: 35px !important;
+    background: #ffffff !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+}
+
+#crmWebToEntityForm .zcwf_title {
+    max-width: 100% !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #0B2239 !important;
+    margin-bottom: 25px !important;
+}
+
+#crmWebToEntityForm .zcwf_row {
+    width: 50% !important;
+    float: left !important;
+    padding: 0 18px !important;
+    margin: 0 0 22px 0 !important;
+    box-sizing: border-box !important;
+}
+
+#crmWebToEntityForm .zcwf_col_lab,
+#crmWebToEntityForm .zcwf_col_fld {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+#crmWebToEntityForm .zcwf_col_lab {
+    padding: 0 0 8px 0 !important;
+    font-weight: 600 !important;
+    color: #0B2239 !important;
+}
+
+#crmWebToEntityForm input[type="text"],
+#crmWebToEntityForm input[type="email"],
+#crmWebToEntityForm input[type="date"],
+#crmWebToEntityForm input[type="number"],
+#crmWebToEntityForm select,
+#crmWebToEntityForm textarea {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 11px 14px !important;
+    border: 1px solid #ccd8e2 !important;
+    border-radius: 7px !important;
+    box-sizing: border-box !important;
+    font-size: 15px !important;
+    background: #ffffff !important;
+}
+
+#crmWebToEntityForm textarea {
+    min-height: 100px !important;
+    resize: vertical !important;
+}
+
+#crmWebToEntityForm .formsubmit.zcwf_button {
+    background: #00A6A6 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 7px !important;
+    padding: 14px 28px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+
+#crmWebToEntityForm .zcwf_row:last-of-type {
+    width: 100% !important;
+    clear: both !important;
+}
+
+#crmWebToEntityForm form::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+@media (max-width: 768px) {
+    #crmWebToEntityForm {
+        padding: 22px 15px !important;
+    }
+
+    #crmWebToEntityForm .zcwf_row {
+        width: 100% !important;
+        float: none !important;
+        padding: 0 !important;
+    }
+}
 				</style>
-				<div class = 'zcwf_title' style = 'max-width: 600px;color: black; font-family:Arial;'>EGL Website Quote Request</div>
+				<div class = 'zcwf_title' style = 'max-width: 1100px;color: black; font-family:Arial;'>EGL Website Quote Request</div>
 				<div class = 'zcwf_row'>
 					<div class = 'zcwf_col_lab' style = 'font-size:12px; font-family: Arial;'>
 						<label for = 'Company'>Company</label>
