@@ -38,8 +38,8 @@ f("item","Item / purchasing requirement","textarea",true),f("supplier","Supplier
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function fieldHtml(x,serviceId){const id=escapeHtml(x.name),fid="f-"+escapeHtml(serviceId)+"-"+id,label=escapeHtml(x.label),required=x.required?" required":"";let control;
 if(x.type==="textarea")control='<textarea name="'+id+'" id="'+fid+'"'+required+' maxlength="4000"></textarea>';
-else if(x.type==="select")control='<select name="'+id+'" id="f-'+id+'"'+required+'><option value="">Select option</option>'+x.options.map(o=>'<option value="'+escapeHtml(o)+'">'+escapeHtml(o)+'</option>').join("")+'</select>';
-else control='<input name="'+id+'" id="f-'+id+'" type="'+x.type+'"'+required+' '+(x.type==="number"?'min="0.01" step="any"':'maxlength="500"')+'>';
+else if(x.type==="select")control='<select name="'+id+'" id="'+fid+'"'+required+'><option value="">Select option</option>'+x.options.map(o=>'<option value="'+escapeHtml(o)+'">'+escapeHtml(o)+'</option>').join("")+'</select>';
+else control='<input name="'+id+'" id="'+fid+'" type="'+x.type+'"'+required+' '+(x.type==="number"?'min="0.01" step="any"':'maxlength="500"')+'>';
 return '<div class="field '+(x.type==="textarea"?"wide":"")+'"><label for="'+fid+'">'+label+(x.required?" *":"")+'</label>'+control+'</div>'}
 const contactFields='<div class="field"><label>First name *</label><input name="firstName" required maxlength="40" autocomplete="given-name"></div><div class="field"><label>Last name *</label><input name="lastName" required maxlength="80" autocomplete="family-name"></div><div class="field"><label>Email address *</label><input name="email" type="email" required maxlength="100" autocomplete="email"></div><div class="field"><label>Phone number *</label><input name="phone" type="tel" required maxlength="30" autocomplete="tel"></div><div class="field wide"><label>Company (optional)</label><input name="company" maxlength="200" autocomplete="organization"></div>';
 const root=document.getElementById("service-sections");
