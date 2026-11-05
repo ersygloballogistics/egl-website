@@ -43,7 +43,7 @@
     }
 
     header > .container {
-      width: min(1360px, 94%);
+      width: min(1180px, 90%);
     }
 
     nav {
@@ -55,14 +55,39 @@
     }
 
     .brand {
-      font-size: 26px;
-      font-weight: 800;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 164px;
       color: #0B2239;
       text-decoration: none;
+      line-height: 1;
     }
 
-    .brand span {
-      color: #00A6A6;
+    /* Retain the EGL globe symbol while replacing the old LOGISTICS caption. */
+    .brand-symbol {
+      display: block;
+      width: 164px;
+      height: 45px;
+      overflow: hidden;
+    }
+
+    .brand-symbol img {
+      display: block;
+      width: 164px;
+      height: auto;
+    }
+
+    .brand-wordmark {
+      display: block;
+      margin-top: 1px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -.35px;
+      white-space: nowrap;
+      color: #0B2239;
     }
 
     .nav-links {
@@ -356,9 +381,12 @@
     /* MOBILE */
 
     @media (max-width: 850px) {
-      header > .container { width: 94%; }
+      header > .container { width: 90%; }
       nav { gap: 12px; }
-      .brand img { max-height: 54px; }
+      .brand { width: 144px; }
+      .brand-symbol { width: 144px; height: 39px; }
+      .brand-symbol img { width: 144px; }
+      .brand-wordmark { font-size: 12px; }
       .nav-links { gap: 10px; }
       .nav-links a:not(.quote-btn) {
         display: none;
@@ -390,7 +418,7 @@ footer #contact{scroll-margin-top:120px}footer .contact-details p{margin:10px 0;
 <header>
   <div class="container">
     <nav>
-      <a class="brand" href="#top"><img src="egl-logo.png" alt="ERSY GLOBAL" style="height:64px; width:auto; display:block;"></a>
+      <a class="brand" href="#top" aria-label="ERSY GLOBAL homepage"><span class="brand-symbol"><img src="egl-logo.png" alt="" aria-hidden="true"></span><span class="brand-wordmark">ERSY GLOBAL</span></a>
 
       <div class="nav-links"><a href="#top">Home</a><a href="#about">About Us</a><a href="#contact">Contact</a><a href="https://ersygloballogistics.github.io/ersyglobal-website/" title="MyEGL preview (not yet connected to live records)">MyEGL Preview</a><a class="quote-btn" href="services.html">Get Started</a></div>
     </nav>
