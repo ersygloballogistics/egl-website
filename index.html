@@ -42,8 +42,12 @@
       box-shadow: 0 2px 15px rgba(0,0,0,0.06);
     }
 
+    header > .container {
+      width: min(1360px, 94%);
+    }
+
     nav {
-      min-height: 82px;
+      min-height: 78px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -352,6 +356,10 @@
     /* MOBILE */
 
     @media (max-width: 850px) {
+      header > .container { width: 94%; }
+      nav { gap: 12px; }
+      .brand img { max-height: 54px; }
+      .nav-links { gap: 10px; }
       .nav-links a:not(.quote-btn) {
         display: none;
       }
@@ -382,7 +390,7 @@ footer #contact{scroll-margin-top:120px}footer .contact-details p{margin:10px 0;
 <header>
   <div class="container">
     <nav>
-      <a class="brand" href="#top"><img src="egl-logo.png" alt="ERSY GLOBAL" style="height:85px; width:auto; display:block;"></a>
+      <a class="brand" href="#top"><img src="egl-logo.png" alt="ERSY GLOBAL" style="height:64px; width:auto; display:block;"></a>
 
       <div class="nav-links"><a href="#top">Home</a><a href="#about">About Us</a><a href="#contact">Contact</a><a href="https://ersygloballogistics.github.io/ersyglobal-website/" title="MyEGL preview (not yet connected to live records)">MyEGL Preview</a><a class="quote-btn" href="services.html">Get Started</a></div>
     </nav>
