@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MyEGL Account | ERSY GLOBAL</title>
+<style>body{font:16px/1.55 system-ui,Arial;margin:0;background:#f4f8fa;color:#102a43}header{background:#0b2239;color:white;padding:20px 5%}header a{color:#c9f5f3}main{max-width:950px;margin:32px auto;padding:0 16px}.panel{background:white;border:1px solid #dbe5eb;border-radius:14px;padding:25px;margin-bottom:20px;box-shadow:0 8px 22px #102a4309}h1,h2{margin-top:0}input,button,select{font:inherit;padding:12px;border-radius:8px;border:1px solid #b7cbd5}input{width:100%;box-sizing:border-box;margin:7px 0 16px}button{background:#008f91;color:white;border:0;cursor:pointer;margin:4px 8px 4px 0}button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#0b2239}.danger{background:#a73b42}.muted{color:#53687a}.hidden{display:none}.job{border:1px solid #dbe5eb;border-radius:10px;padding:18px;margin:14px 0}.notice{background:#fff8e6;padding:12px;border-radius:8px}.error{color:#a73b42}.success{color:#087443}small{display:block} .methods{display:flex;gap:10px;flex-wrap:wrap} .method{border:1px solid #cbdde3;padding:14px;border-radius:9px;flex:1;min-width:180px}@media(max-width:600px){.panel{padding:18px}}</style></head>
+<body><header><strong>ERSY <span style="color:#42d5d0">GLOBAL</span> | MyEGL</strong><div><a href="/">Back to website</a></div></header><main><h1>MyEGL Customer Portal</h1><p class="muted">Manage your quotations, approvals and shipment requests securely.</p>
+<section class="panel" id="auth"><h2>Sign in or create an account</h2><p class="muted">New accounts require ERSY GLOBAL approval before business information becomes available.</p><label>Email<input type="email" id="email" autocomplete="email"></label><label>Password<input type="password" id="password" autocomplete="current-password" minlength="8"></label><button id="signin">Sign in</button><button id="signup" class="secondary">Create account</button><p id="authMsg" role="status"></p></section>
+<section class="panel hidden" id="dashboard"><button id="signout" class="secondary" style="float:right">Sign out</button><h2>Your MyEGL dashboard</h2><p id="profileMsg" role="status"></p><div id="jobs"></div></section>
+<section class="panel"><h2>Payment options</h2><p class="notice"><strong>Pre-launch test mode:</strong> ERSY GLOBAL is not collecting payments through this portal. No payment details or bank information will be requested here.</p><div class="methods"><div class="method"><strong>Card — Stripe</strong><small class="muted">Checkout will be enabled after business verification. Currently unavailable.</small></div><div class="method"><strong>International bank transfer</strong><small class="muted">Verified invoice and official bank instructions will be provided after onboarding. Currently unavailable.</small></div></div></section><p id="globalMsg" role="status"></p></main>
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+const supabase=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH');
+const $=id=>document.getElementById(id);
+const msg=(id,value,error=false)=>{ $(id).textContent=value;$(id).className=error?'error':'success'; };
+const text=(tag,value)=>{const n=document.createElement(tag);n.textContent=value??'';return n};
+async function refresh(){
+const {data:{user}}=await supabase.auth.getUser();
+$('auth').classList.toggle('hidden',!!user);$('dashboard').classList.toggle('hidden',!user);
+if(!user)return;
+const {data:profile,error:e}=await supabase.from('portal_customers').select('approved,email').eq('id',user.id).maybeSingle();
+if(e){msg('profileMsg','Unable to load account status: '+e.message,true);return}
+if(!profile){msg('profileMsg','Your account is being prepared. Contact ERSY GLOBAL if this persists.',true);return}
+if(!profile.approved){msg('profileMsg','Account registered. Awaiting ERSY GLOBAL approval before your quotations become visible.');$('jobs').replaceChildren();return}
+msg('profileMsg','Account approved. Welcome, '+profile.email+'.');
+const {data:jobs,error}=await supabase.from('portal_jobs').select('id,reference,service_type,origin,destination,currency,quoted_total,quote_status,payment_status,shipment_status,tracking_number,created_at').eq('customer_id',user.id).order('created_at',{ascending:false});
+if(error){msg('globalMsg','Unable to load quotations: '+error.message,true);return}
+$('jobs').replaceChildren();
+if(!jobs?.length){$('jobs').append(text('p','No quotations linked to your account yet. Contact sales@ersygloballogistics.com with your RFQ reference.'));return}
+for(const j of jobs){const box=text('div','');box.className='job';const title=text('h3',j.reference||'Quotation');box.append(title,text('p','Service: '+(j.service_type||'—')+' | '+(j.origin||'—')+' → '+(j.destination||'—')),text('p','Quotation: '+(j.quoted_total==null?'Not issued':(j.currency||'AED')+' '+Number(j.quoted_total).toLocaleString())),text('p','Quote status: '+j.quote_status+' | Payment: '+j.payment_status),text('p','Shipment: '+(j.shipment_status||'Not started')+(j.tracking_number?' | Tracking: '+j.tracking_number:'')));
+if(j.quote_status==='pending'&&Number(j.quoted_total)>0){for(const decision of ['approved','declined']){const b=text('button',decision==='approved'?'Accept quotation':'Decline quotation');if(decision==='declined')b.className='danger';b.onclick=async()=>{if(!confirm('Confirm you want to '+(decision==='approved'?'accept':'decline')+' quotation '+j.reference+'?'))return;b.disabled=true;const {error}=await supabase.rpc('myegl_quote_decision',{p_job_id:j.id,p_decision:decision});if(error)alert('Unable to save decision: '+error.message);await refresh()};box.append(b)}}$('jobs').append(box)}
+}
+$('signup').onclick=async()=>{const email=$('email').value.trim(),password=$('password').value;if(!email||password.length<8){msg('authMsg','Enter a valid email and password of at least 8 characters.',true);return}const {error}=await supabase.auth.signUp({email,password,emailRedirectTo:location.origin+'/myegl-account.html'});msg('authMsg',error?error.message:'Registration submitted. Check your email to confirm your account, then wait for ERSY GLOBAL approval.',!!error);if(!error)await refresh()};
+$('signin').onclick=async()=>{const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)msg('authMsg',error.message,true);else await refresh()};
+$('signout').onclick=async()=>{await supabase.auth.signOut();await refresh()};
+supabase.auth.onAuthStateChange(()=>{setTimeout(refresh,0)});refresh();
+</script></body></html>
