@@ -13,7 +13,9 @@ const $=id=>document.getElementById(id);
 const msg=(id,value,error=false)=>{ $(id).textContent=value;$(id).className=error?'error':'success'; };
 const text=(tag,value)=>{const n=document.createElement(tag);n.textContent=value??'';return n};
 let recoveryMode=false;
-let forgotMode=false;\nlet profileMode=false;\nlet activeUser=null;
+let forgotMode=false;
+let profileMode=false;
+let activeUser=null;
 async function loadAdmin(){
 const list=$('adminCustomers');list.replaceChildren();
 const {data:customers,error}=await supabase.from('portal_customers').select('id,email,approved,created_at').order('created_at',{ascending:false});
