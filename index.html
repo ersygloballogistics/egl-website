@@ -616,6 +616,33 @@ header nav{min-height:88px;gap:24px}
 .egl-contact-dialog .egl-contact-send{background:#008f91;color:#fff;border:0;border-radius:9px;padding:12px 20px;font-weight:700;cursor:pointer;margin-top:17px}
 .egl-contact-dialog .egl-contact-send:disabled{opacity:.6;cursor:wait}.egl-contact-dialog .egl-contact-status{margin-top:10px;font-size:14px}
 .egl-contact-dialog .egl-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Consistent, straight mobile menu rows across all pages */
+@media(max-width:850px){
+ .egl-drawer[data-open="true"]{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important}
+ .egl-drawer a.egl-mobile-link{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  align-items:center!important;justify-content:start!important;
+  justify-items:start!important;column-gap:12px!important;
+  width:100%!important;max-width:100%!important;
+  min-height:44px!important;margin:0!important;
+  padding:9px 6px!important;text-align:left!important;
+  font-style:normal!important;transform:none!important;
+  line-height:1.35!important;white-space:normal!important;
+ }
+ .egl-drawer .egl-mobile-link-icon{
+  display:flex!important;width:24px!important;height:24px!important;
+  flex:none!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:0!important;transform:none!important;
+ }
+ .egl-drawer .egl-mobile-link-icon svg{display:block!important;width:20px!important;height:20px!important}
+ .egl-drawer a.egl-mobile-link > span:last-child{
+  display:block!important;margin:0!important;padding:0!important;
+  text-align:left!important;justify-self:start!important;
+  font-style:normal!important;white-space:normal!important;
+ }
+}
 </style></head>
 
 <body>
