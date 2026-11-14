@@ -503,6 +503,45 @@ html[data-egl-theme="dark"] .password-toggle{color:var(--egl-ink)}
 .egl-contact-item a:hover{text-decoration:underline;color:#008f91}
 .egl-contact-item p{color:var(--egl-muted);line-height:1.8}
 @media(max-width:700px){.egl-contact-grid{grid-template-columns:1fr;gap:25px}.egl-contact-section .section-heading{margin-bottom:32px}.egl-contact-section .section-heading h2{font-size:clamp(28px,8vw,36px)}.egl-contact-item{padding:6px 0 14px}.egl-contact-item h3{margin-bottom:8px}}
+
+/* Homepage header refresh: one consistent light theme */
+html,html[data-egl-theme]{color-scheme:light!important;--egl-bg:#fff;--egl-panel:#fff;--egl-ink:#102a43;--egl-soft:#f4f8fa;--egl-muted:#53687a;--egl-border:#dbe5eb}
+header{background:#fff!important;box-shadow:0 1px 0 #e5edf0,0 8px 28px #0b22390a}
+header>.container{width:min(1240px,92%)}
+header nav{min-height:88px;gap:24px}
+.nav-links{align-items:center;gap:clamp(18px,2.6vw,36px)}
+.nav-links a{position:relative;padding:14px 0;font-size:14px;letter-spacing:.1px;white-space:nowrap}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:2px;background:#00a6a6;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.nav-links a:hover::after,.nav-links a:focus-visible::after{transform:scaleX(1)}
+.nav-links a:last-child{border:1px solid #b9d7da;border-radius:999px;padding:11px 17px;background:#f2fbfb;color:#0b4350}
+.nav-links a:last-child::after{display:none}
+.nav-links a:last-child:hover{background:#e1f5f5}
+.egl-tools{display:none}
+@media(max-width:850px){
+ header nav{min-height:70px;gap:12px}
+ .egl-tools{display:flex;margin-left:auto}
+ .egl-tools .egl-menu-button{display:inline-flex}
+ .nav-links{display:none!important}
+ .hero{min-height:auto}
+ .hero-content{padding:clamp(70px,12vw,110px) 0}
+ .hero h1{font-size:clamp(35px,9vw,56px);line-height:1.13}
+ .hero p{font-size:16px;line-height:1.8}
+ .section-heading{margin-bottom:36px}
+ .section-heading h2{font-size:clamp(28px,7vw,38px)}
+ section{padding:clamp(65px,10vw,88px) 0}
+ .service-grid{gap:26px}
+ .service-card{padding:28px}
+}
+@media(max-width:480px){
+ header>.container{width:92%}
+ .hero-content{padding:75px 0 80px}
+ .hero h1{font-size:clamp(34px,9vw,44px)}
+ .hero h2{font-size:20px;line-height:1.45}
+ .hero p{margin-bottom:28px}
+ .service-card{padding:25px}
+ .why-text h2,.cta h2{font-size:clamp(29px,8vw,36px)}
+ .process-box{padding:27px 23px}
+}
 </style></head>
 
 <body>
@@ -513,7 +552,7 @@ html[data-egl-theme="dark"] .password-toggle{color:var(--egl-ink)}
     <nav>
       <a class="brand" href="#top" aria-label="ERSY GLOBAL homepage"><span class="brand-symbol"><img src="egl-logo.png" alt="" aria-hidden="true"></span><span class="brand-wordmark">ERSY GLOBAL</span></a>
 
-      <div class="nav-links"><a href="#top">Home</a><a href="services.html">Services</a><a href="#about">About Us</a><a href="#contact">Contact Us</a><a href="/myegl-account.html" title="Sign in to your MyEGL customer portal">MyEGL Portal</a></div>
+      <div class="nav-links" aria-label="Main navigation"><a href="#top">Home</a><a href="services.html">Services</a><a href="#about">About Us</a><a href="#contact">Contact Us</a><a href="/myegl-account.html" title="Sign in to your MyEGL customer portal">MyEGL Portal</a></div>
     </nav>
   </div>
 </header>
@@ -693,20 +732,15 @@ html[data-egl-theme="dark"] .password-toggle{color:var(--egl-ink)}
 </footer>
 
 <script id="egl-ui-behavior">
-(()=>{const root=document.documentElement;const key='egl-theme';let stored;try{stored=localStorage.getItem(key)}catch(e){}root.dataset.eglTheme=stored==='dark'||stored==='light'?stored:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-const header=document.querySelector('body > header,header');if(!header)return;
+(()=>{document.documentElement.dataset.eglTheme='light';
+const header=document.querySelector('body > header');if(!header)return;
 const tools=document.createElement('div');tools.className='egl-tools';
-const theme=document.createElement('button');theme.type='button';theme.className='egl-icon-button';theme.setAttribute('aria-label','Switch color theme');
-const sync=()=>{const dark=root.dataset.eglTheme==='dark';theme.textContent=dark?'☀':'☾';theme.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');theme.setAttribute('title',dark?'Switch to light mode':'Switch to dark mode');theme.setAttribute('aria-pressed',String(dark));};sync();
-theme.addEventListener('click',()=>{root.dataset.eglTheme=root.dataset.eglTheme==='dark'?'light':'dark';try{localStorage.setItem(key,root.dataset.eglTheme)}catch(e){}sync()});
-const menu=document.createElement('button');menu.type='button';menu.className='egl-icon-button egl-menu-button';menu.textContent='☰';menu.setAttribute('aria-label','Open navigation menu');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-controls','egl-mobile-nav');
-tools.append(menu,theme);
-const mount=header.querySelector('nav')||header.querySelector('.nav')||header;mount.append(tools);
+const menu=document.createElement('button');menu.type='button';menu.className='egl-icon-button egl-menu-button';menu.textContent='☰';menu.setAttribute('aria-label','Open navigation menu');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-controls','egl-mobile-nav');tools.append(menu);
+const mount=header.querySelector('nav');mount.append(tools);
 const scrim=document.createElement('div');scrim.className='egl-scrim';scrim.hidden=true;
 const drawer=document.createElement('nav');drawer.id='egl-mobile-nav';drawer.className='egl-drawer';drawer.setAttribute('aria-label','Mobile navigation');
 const close=document.createElement('button');close.type='button';close.className='egl-icon-button egl-close';close.textContent='✕ Close';drawer.append(close);
-const links=[['Home','/'],['Services','/services.html'],['About Us','/#about'],['Contact Us','/#contact'],['MyEGL Portal','/myegl-account.html']];
-links.forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.textContent=name;drawer.append(a)});
+[['Home','/'],['Services','/services.html'],['About Us','/#about'],['Contact Us','/#contact'],['MyEGL Portal','/myegl-account.html']].forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.textContent=name;drawer.append(a)});
 document.body.append(scrim,drawer);
 const toggle=open=>{drawer.dataset.open=String(open);scrim.hidden=!open;menu.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';if(open)close.focus();else menu.focus()};
 menu.addEventListener('click',()=>toggle(true));close.addEventListener('click',()=>toggle(false));scrim.addEventListener('click',()=>toggle(false));drawer.addEventListener('click',e=>{if(e.target.closest('a'))toggle(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.dataset.open==='true')toggle(false)});
