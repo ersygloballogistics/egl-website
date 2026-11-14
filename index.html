@@ -563,6 +563,12 @@ header nav{min-height:88px;gap:24px}
  .egl-footer-about p{font-size:15px}
  .egl-footer-links a{padding:5px 0}
 }
+
+/* Keep mobile menu links closely grouped without reducing tap accessibility */
+@media(max-width:850px){
+ .egl-drawer{justify-content:flex-start!important;align-items:stretch!important;gap:0!important}
+ .egl-drawer a{flex:0 0 auto!important;min-height:0!important;padding:9px 2px!important;margin:0!important;line-height:1.35!important}
+}
 </style></head>
 
 <body>
