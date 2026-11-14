@@ -605,6 +605,17 @@ header nav{min-height:88px;gap:24px}
  .egl-drawer{width:min(242px,calc(100vw - 28px))!important;padding-left:12px!important;padding-right:12px!important}
  .egl-drawer a.egl-mobile-link{gap:10px!important;padding-left:6px!important;padding-right:4px!important}
 }
+
+.egl-contact-dialog{border:0;border-radius:18px;width:min(470px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;padding:26px;background:#fff;color:#163047;box-shadow:0 25px 80px #0003}
+.egl-contact-dialog::backdrop{background:rgba(9,28,47,.55)}
+.egl-contact-dialog h2{font-size:23px;margin:0 0 7px}.egl-contact-dialog p{margin:0 0 18px;color:#56677a}
+.egl-contact-dialog label{display:block;font-weight:600;font-size:13px;margin:13px 0 5px}
+.egl-contact-dialog input,.egl-contact-dialog textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #cbd5df;border-radius:9px;padding:11px 12px;font:inherit;background:#fff;color:#173047}
+.egl-contact-dialog textarea{min-height:120px;resize:vertical}.egl-contact-dialog .egl-dialog-top{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.egl-contact-dialog .egl-dialog-close{border:0;background:#edf3f6;border-radius:8px;cursor:pointer;padding:7px 11px;font-size:19px}
+.egl-contact-dialog .egl-contact-send{background:#008f91;color:#fff;border:0;border-radius:9px;padding:12px 20px;font-weight:700;cursor:pointer;margin-top:17px}
+.egl-contact-dialog .egl-contact-send:disabled{opacity:.6;cursor:wait}.egl-contact-dialog .egl-contact-status{margin-top:10px;font-size:14px}
+.egl-contact-dialog .egl-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 </style></head>
 
 <body>
@@ -744,7 +755,7 @@ header nav{min-height:88px;gap:24px}
       <p>Have a question about procurement, shipping, or our services? Our team is here to help.</p>
     </div>
     <div class="egl-contact-grid">
-      <div class="egl-contact-item"><h3>Email Us</h3><a href="mailto:sales@ersygloballogistics.com">sales@ersygloballogistics.com</a><a href="mailto:info@ersygloballogistics.com">info@ersygloballogistics.com</a></div>
+      <div class="egl-contact-item"><h3>Email Us</h3><a href="#contact" class="egl-contact-email" data-recipient="sales">sales@ersygloballogistics.com</a><a href="#contact" class="egl-contact-email" data-recipient="info">info@ersygloballogistics.com</a></div>
       <div class="egl-contact-item"><h3>Call Us</h3><a href="tel:+971556581004">+971 55 658 1004</a></div>
       <div class="egl-contact-item"><h3>Our Location</h3><p>Al Barsha Heights, Dubai Internet City<br>Dubai, United Arab Emirates</p></div>
     </div>
@@ -794,6 +805,43 @@ document.body.append(scrim,drawer);
 const toggle=open=>{drawer.dataset.open=String(open);scrim.hidden=!open;menu.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';if(open)close.focus();else menu.focus()};
 menu.addEventListener('click',()=>toggle(true));close.addEventListener('click',()=>toggle(false));scrim.addEventListener('click',()=>toggle(false));drawer.addEventListener('click',e=>{if(e.target.closest('a'))toggle(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.dataset.open==='true')toggle(false)});
 })();
-</script></body>
+</script>
+<dialog class="egl-contact-dialog" id="egl-contact-dialog" aria-labelledby="egl-contact-dialog-title">
+ <div class="egl-dialog-top"><div><h2 id="egl-contact-dialog-title">Send Us a Message</h2><p>General enquiries — we'll get back to you by email.</p></div><button class="egl-dialog-close" type="button" aria-label="Close contact form">×</button></div>
+ <form id="egl-contact-form">
+  <label for="egl-contact-name">Your name *</label><input id="egl-contact-name" name="name" maxlength="120" autocomplete="name" required>
+  <label for="egl-contact-email-input">Your email address *</label><input id="egl-contact-email-input" name="email" type="email" maxlength="250" autocomplete="email" required>
+  <label for="egl-contact-phone">Contact number (optional)</label><input id="egl-contact-phone" name="phone" type="tel" maxlength="40" autocomplete="tel">
+  <label for="egl-contact-message">Your message *</label><textarea id="egl-contact-message" name="message" maxlength="3000" minlength="5" placeholder="How can we help you?" required></textarea>
+  <div class="egl-hp" aria-hidden="true"><label for="egl-contact-website">Website</label><input id="egl-contact-website" name="website" tabindex="-1" autocomplete="off"></div>
+  <button class="egl-contact-send" type="submit">Send Message</button><div class="egl-contact-status" role="status" aria-live="polite"></div>
+ </form>
+</dialog>
+<script id="egl-contact-popup-script">
+(()=>{
+ const dialog=document.getElementById('egl-contact-dialog'),form=document.getElementById('egl-contact-form');
+ if(!dialog||!form)return;
+ let recipient='info';
+ const status=dialog.querySelector('.egl-contact-status'),button=dialog.querySelector('.egl-contact-send');
+ document.querySelectorAll('.egl-contact-email').forEach(link=>link.addEventListener('click',event=>{
+  event.preventDefault();recipient=link.dataset.recipient==='sales'?'sales':'info';status.textContent='';status.style.color='';dialog.showModal();
+ }));
+ dialog.querySelector('.egl-dialog-close').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();if(!form.reportValidity())return;
+  button.disabled=true;button.textContent='Sending…';status.textContent='';
+  const fields=new FormData(form);
+  try{
+   const res=await fetch('https://mycknhzaadlaopqjpnpi.supabase.co/functions/v1/website-contact-message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:fields.get('name'),email:fields.get('email'),phone:fields.get('phone'),message:fields.get('message'),website:fields.get('website'),recipient})});
+   const data=await res.json();
+   if(!res.ok||!data.ok)throw Error(data.error||'Unable to send your message');
+   form.reset();status.style.color='#007e78';status.textContent='Thank you! Your message has been sent successfully.';
+  }catch(error){status.style.color='#b42318';status.textContent=error.message||'Unable to send your message. Please try again.'}
+  finally{button.disabled=false;button.textContent='Send Message'}
+ });
+})();
+</script>
+</body>
 </html>
 
