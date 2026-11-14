@@ -51,6 +51,22 @@ header .wrap.nav{width:min(1180px,90%);min-height:78px;display:flex;align-items:
  .hero{padding:34px 0}.hero h1{font-size:32px}.hero p{font-size:15px}
  .form-card{padding:16px}.intro h2{font-size:26px}
 }
+
+/* Desktop and tablet header alignment shared with homepage */
+@media(min-width:851px){
+ header .wrap.nav{width:min(1180px,90%);margin-inline:auto;justify-content:space-between!important;gap:30px}
+ header .egl-desktop-nav{margin-left:auto!important;justify-content:flex-end;gap:28px;flex:0 1 auto;min-width:0}
+ header .egl-desktop-nav a{position:relative;padding:14px 0;font-size:14px;letter-spacing:.1px;color:#0b2239}
+ header .egl-desktop-nav a:not(:last-child)::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:2px;background:#00a6a6;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+ header .egl-desktop-nav a:not(:last-child):hover::after,header .egl-desktop-nav a:not(:last-child):focus-visible::after{transform:scaleX(1)}
+ header .egl-desktop-nav a:last-child{border:1px solid #b9d7da;border-radius:999px;padding:11px 17px;background:#f2fbfb;color:#0b4350}
+ header .egl-desktop-nav a:last-child:hover{background:#e1f5f5}
+}
+@media(min-width:851px) and (max-width:1050px){
+ header .egl-desktop-nav{gap:16px}
+ header .egl-desktop-nav a{font-size:13px}
+ header .egl-desktop-nav a:last-child{padding:10px 12px}
+}
 </style></head>
 <body>
 <header><div class="wrap nav"><a class="egl-brand" href="/" aria-label="ERSY GLOBAL homepage"><span class="egl-brand-image"><img src="egl-logo.png" alt="" aria-hidden="true"></span><span class="egl-brand-name">ERSY GLOBAL</span></a><nav aria-label="Main navigation" class="egl-desktop-nav"><a href="/">Home</a><a href="/services.html">Services</a><a href="/#about">About Us</a><a href="/#contact">Contact Us</a><a href="/myegl-account.html">MyEGL Portal</a></nav></div></header>
