@@ -116,7 +116,7 @@ header .egl-portal-title-row .egl-portal-back{width:34px;height:34px;flex:none;f
 <p id="globalMsg" role="status"></p></main>
 <script type="module">
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-const supabase=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:false,autoRefreshToken:true,detectSessionInUrl:true}});
+const supabase=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
 const msg=(id,value,error=false)=>{ $(id).textContent=value;$(id).className=error?'error':'success'; };
 const text=(tag,value)=>{const n=document.createElement(tag);n.textContent=value??'';return n};
