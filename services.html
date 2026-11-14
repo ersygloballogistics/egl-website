@@ -80,6 +80,33 @@ footer.egl-footer{background:#071725;color:#b9cbd4;padding:56px 0 24px}
 .egl-footer-links a:hover{text-decoration:underline}
 .egl-footer .copyright{border-top:1px solid #294152;padding-top:24px;color:#b9cbd4;font-size:13px}
 @media(max-width:700px){footer.egl-footer{padding:48px 0 25px}.egl-footer-main{grid-template-columns:1fr;gap:30px;padding-bottom:32px}.egl-footer-about p{font-size:15px}.egl-footer-links a{padding:5px 0}}
+
+/* Consistent, straight mobile menu rows across all pages */
+@media(max-width:850px){
+ .egl-drawer[data-open="true"]{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important}
+ .egl-drawer a.egl-mobile-link{
+  box-sizing:border-box!important;display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  align-items:center!important;justify-content:start!important;
+  justify-items:start!important;column-gap:12px!important;
+  width:100%!important;max-width:100%!important;
+  min-height:44px!important;margin:0!important;
+  padding:9px 6px!important;text-align:left!important;
+  font-style:normal!important;transform:none!important;
+  line-height:1.35!important;white-space:normal!important;
+ }
+ .egl-drawer .egl-mobile-link-icon{
+  display:flex!important;width:24px!important;height:24px!important;
+  flex:none!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:0!important;transform:none!important;
+ }
+ .egl-drawer .egl-mobile-link-icon svg{display:block!important;width:20px!important;height:20px!important}
+ .egl-drawer a.egl-mobile-link > span:last-child{
+  display:block!important;margin:0!important;padding:0!important;
+  text-align:left!important;justify-self:start!important;
+  font-style:normal!important;white-space:normal!important;
+ }
+}
 </style></head>
 <body>
 <header><div class="wrap nav"><a class="egl-brand" href="/" aria-label="ERSY GLOBAL homepage"><span class="egl-brand-image"><img src="egl-logo.png" alt="" aria-hidden="true"></span><span class="egl-brand-name">ERSY GLOBAL</span></a><nav aria-label="Main navigation" class="egl-desktop-nav"><a href="/">Home</a><a href="/services.html">Services</a><a href="/#about">About Us</a><a href="/#contact">Contact Us</a><a href="/myegl-account.html">MyEGL Portal</a></nav></div></header>
