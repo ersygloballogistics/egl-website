@@ -20,7 +20,7 @@ header .wrap.nav{width:min(1180px,90%);min-height:78px;display:flex;align-items:
 .egl-brand-name{display:block;margin-top:1px;font-size:14px;font-weight:800;letter-spacing:-.35px;white-space:nowrap}
 .egl-desktop-nav{display:flex;align-items:center;gap:26px;flex-wrap:nowrap}
 .egl-desktop-nav a{font-size:14px;font-weight:600;white-space:nowrap}
-.egl-tools{display:flex;align-items:center;margin-left:auto;flex-shrink:0}
+.egl-tools{display:none;align-items:center;margin-left:auto;flex-shrink:0}
 .egl-icon-button{border:1px solid #dbe5eb;border-radius:12px;background:white;color:#102a43;min-height:42px;min-width:42px;padding:8px 12px;font:600 14px/1.3 system-ui;cursor:pointer}
 .egl-menu-button{display:none}.egl-drawer{display:none}
 .egl-scrim{position:fixed;inset:0;background:#0006;z-index:99999}.egl-scrim[hidden]{display:none}
@@ -28,6 +28,7 @@ header .wrap.nav{width:min(1180px,90%);min-height:78px;display:flex;align-items:
 @media(max-width:850px){
  .egl-desktop-nav{display:none!important}
  .egl-menu-button{display:inline-flex;align-items:center;justify-content:center}
+ .egl-tools{display:flex;margin-left:auto}
  .egl-drawer{position:fixed;top:76px;right:clamp(12px,4vw,26px);bottom:auto;left:auto;width:min(242px,calc(100vw - 28px));height:auto;max-height:calc(100dvh - 94px);overflow-y:auto;padding:48px 12px 14px;background:#fff;color:#102a43;border:1px solid #e0e9ed;border-radius:16px;box-shadow:0 16px 48px #102a4326;z-index:100000;flex-direction:column;gap:0}
  .egl-drawer[data-open="true"]{display:flex}
  .egl-drawer .egl-close{position:absolute;top:9px;right:10px;font-size:13px}
