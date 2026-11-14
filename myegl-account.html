@@ -150,7 +150,20 @@ function toggleAccountMenu(open){$('accountMenu').classList.toggle('hidden',!ope
 $('accountTrigger').onclick=()=>toggleAccountMenu($('accountMenu').classList.contains('hidden'));
 $('menuLogin').onclick=()=>{toggleAccountMenu(false);profileMode=false;forgotMode=false;recoveryMode=false;refresh();$('email').focus()};
 $('menuProfile').onclick=()=>{toggleAccountMenu(false);profileMode=true;refresh()};
-async function logout(){toggleAccountMenu(false);profileMode=false;await supabase.auth.signOut();await refresh()}
+const IDLE_KEY='myegl:lastActivity';
+const ADMIN_IDLE_MS=5*60*1000;
+const CUSTOMER_IDLE_MS=15*60*1000;
+let idleUser=null;
+let idleBusy=false;
+function idleLimit(){return idleUser?.app_metadata?.myegl_role==='admin'?ADMIN_IDLE_MS:CUSTOMER_IDLE_MS}
+function idleStamp(){const n=Number(sessionStorage.getItem(IDLE_KEY));return Number.isFinite(n)&&n>0?n:0}
+function recordActivity(){if(!idleUser||idleBusy)return;const now=Date.now();if(idleStamp()&&now-idleStamp()>=idleLimit()){void checkIdle();return}sessionStorage.setItem(IDLE_KEY,String(now))}
+async function checkIdle(){if(idleBusy)return;idleBusy=true;try{const {data:{user}}=await supabase.auth.getUser();if(!user){idleUser=null;sessionStorage.removeItem(IDLE_KEY);return}idleUser=user;const last=idleStamp();if(!last||Date.now()-last>=idleLimit()){sessionStorage.removeItem(IDLE_KEY);idleUser=null;await supabase.auth.signOut();await refresh()}}finally{idleBusy=false}}
+for(const eventName of ['pointerdown','keydown','touchstart','scroll'])document.addEventListener(eventName,recordActivity,{passive:true});
+window.addEventListener('focus',()=>{void checkIdle()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)void checkIdle()});
+setInterval(()=>{void checkIdle()},15000);
+async function logout(){toggleAccountMenu(false);profileMode=false;idleUser=null;sessionStorage.removeItem(IDLE_KEY);await supabase.auth.signOut();await refresh()}
 $('menuLogout').onclick=logout;
 $('closeProfile').onclick=()=>{profileMode=false;refresh()};
 $('saveProfile').onclick=async()=>{const b=$('saveProfile');b.disabled=true;try{const {error}=await supabase.auth.updateUser({data:{full_name:$('profileName').value.trim(),phone_contact:$('profilePhone').value.trim(),address_contact:$('profileAddress').value.trim()}});msg('profileSaveMsg',error?error.message:'Your profile details have been saved.',!!error)}finally{b.disabled=false}};
@@ -161,7 +174,9 @@ $('forgotPanel').classList.toggle('hidden',!forgotMode);
 if(forgotMode){$('registerPanel').classList.add('hidden');$('adminPanel').classList.add('hidden');$('auth').classList.add('hidden');$('dashboard').classList.add('hidden');$('resetPanel').classList.add('hidden');return}
 $('resetPanel').classList.add('hidden');
 $('registerPanel').classList.toggle('hidden',!registerMode);if(registerMode){$('auth').classList.add('hidden');$('dashboard').classList.add('hidden');$('adminPanel').classList.add('hidden');$('profilePanel').classList.add('hidden');$('registrationPending').classList.toggle('hidden',!registrationPending);return}
-const {data:{user}}=await supabase.auth.getUser();activeUser=user;
+const {data:{user}}=await supabase.auth.getUser();
+if(user){idleUser=user;const last=idleStamp();if(last&&Date.now()-last>=idleLimit()){idleUser=null;sessionStorage.removeItem(IDLE_KEY);await supabase.auth.signOut();return refresh()}if(!last)sessionStorage.setItem(IDLE_KEY,String(Date.now()))}else{idleUser=null;sessionStorage.removeItem(IDLE_KEY)}
+activeUser=user;
 $('menuEmail').textContent=user?.email||'Not signed in';$('menuProfile').classList.toggle('hidden',!user);$('menuLogout').classList.toggle('hidden',!user);$('menuLogin').classList.toggle('hidden',!!user);
 $('accountTrigger').querySelector('span').textContent=user?'My profile':'My account';
 if(profileMode&&user){$('auth').classList.add('hidden');$('dashboard').classList.add('hidden');$('adminPanel').classList.add('hidden');$('profilePanel').classList.remove('hidden');$('profileName').value=user.user_metadata?.full_name||'';$('profilePhone').value=user.user_metadata?.phone_contact||'';$('profileAddress').value=user.user_metadata?.address_contact||'';return}
@@ -198,7 +213,7 @@ $('sendRecovery').onclick=async()=>{const email=$('recoveryEmail').value.trim();
 $('toggleNewPassword').onclick=()=>{const input=$('newPassword');const show=input.type==='password';input.type=show?'text':'password';$('toggleNewPassword').textContent=show?'Hide':'Show';$('toggleNewPassword').setAttribute('aria-label',show?'Hide new password':'Show new password')};
 $('saveNewPassword').onclick=async()=>{const password=$('newPassword').value;if(password.length<8){msg('resetMsg','Password must contain at least 8 characters.',true);return}const btn=$('saveNewPassword');btn.disabled=true;try{const {error}=await supabase.auth.updateUser({password});if(error){msg('resetMsg',error.message,true);return}recoveryMode=false;forgotMode=false;$('newPassword').value='';await supabase.auth.signOut();await refresh();msg('authMsg','Password updated successfully. Sign in with your new password.')}finally{btn.disabled=false}};
 
-supabase.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY')recoveryMode=true;setTimeout(refresh,0)});refresh();
+supabase.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY')recoveryMode=true;if(event==='SIGNED_IN'&&!idleStamp())sessionStorage.setItem(IDLE_KEY,String(Date.now()));if(event==='SIGNED_OUT'){idleUser=null;sessionStorage.removeItem(IDLE_KEY)}setTimeout(refresh,0)});refresh();
 </script><script id="egl-ui-behavior">
 (()=>{const root=document.documentElement;root.dataset.eglTheme='light';
 const header=document.querySelector('body > header,header');if(!header)return;
