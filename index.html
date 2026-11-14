@@ -542,6 +542,27 @@ header nav{min-height:88px;gap:24px}
  .why-text h2,.cta h2{font-size:clamp(29px,8vw,36px)}
  .process-box{padding:27px 23px}
 }
+
+/* Compact mobile drawer and simplified homepage footer */
+@media(max-width:850px){
+ .egl-drawer{padding:64px 24px 22px;gap:0}
+ .egl-drawer a{min-height:44px!important;padding:10px 2px!important;margin:0!important;line-height:1.35;font-size:16px}
+ .egl-drawer .egl-close{top:14px;right:16px}
+}
+.egl-footer{padding:56px 0 24px}
+.egl-footer-main{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:clamp(28px,6vw,90px);padding-bottom:44px}
+.egl-footer-about{max-width:430px}
+.egl-footer-about h3{font-size:23px;letter-spacing:.3px}
+.egl-footer-about p{margin:10px 0;color:#b9c6ce;line-height:1.75}
+.egl-footer-links h4{margin-bottom:17px}
+.egl-footer-links a{display:block;width:max-content;max-width:100%;padding:4px 0;margin:6px 0}
+.egl-footer .copyright{padding-top:24px}
+@media(max-width:700px){
+ .egl-footer{padding:48px 0 25px}
+ .egl-footer-main{grid-template-columns:1fr;gap:30px;padding-bottom:32px}
+ .egl-footer-about p{font-size:15px}
+ .egl-footer-links a{padding:5px 0}
+}
 </style></head>
 
 <body>
@@ -691,43 +712,22 @@ header nav{min-height:88px;gap:24px}
 </main>
 
 
-<footer>
+<footer class="egl-footer">
   <div class="container">
-
-    <div class="footer-grid">
-
-      <div>
+    <div class="egl-footer-main">
+      <div class="egl-footer-about">
         <h3>ERSY GLOBAL</h3>
         <p>Source. Purchase. Ship. Store. Deliver.</p>
-        <p style="margin-top:12px;">
-          Integrated procurement, freight and fulfillment solutions.
-        </p>
+        <p>Integrated procurement, freight and fulfillment solutions.</p>
       </div>
-
-      <div>
-        <h4>Services</h4>
-        <a href="services.html#procurement">Procurement</a>
-        <a href="services.html#freight">Freight Forwarding</a>
-        <a href="services.html#warehousing">Warehousing</a>
-        <a href="services.html#buy-for-me">Buy For Me</a>
-        <a href="services.html#shop-ship">Shop &amp; Ship</a>
+      <div class="egl-footer-links">
+        <h4>Quick Links</h4>
+        <a href="#about">About Us</a>
+        <a href="#contact">Contact Us</a>
+        <a href="/myegl-account.html">MyEGL Portal</a>
       </div>
-
-      <div class="contact-details">
-        <h4>Contact ERSY GLOBAL</h4>
-        <p>For general enquiries:</p>
-        <p><strong>Sales:</strong> <span>sales@ersygloballogistics.com</span></p>
-        <p><strong>Information:</strong> <span>info@ersygloballogistics.com</span></p>
-        <p><strong>Phone:</strong> <span>+971 55 658 1004</span></p>
-        <p><strong>Office address:</strong> <span>Al Barsha Heights, Dubai Internet City, Dubai, UAE</span></p>
-      </div>
-
     </div>
-
-    <div class="copyright">
-      © 2026 ERSY GLOBAL. All rights reserved.
-    </div>
-
+    <div class="copyright">© 2026 ERSY GLOBAL. All rights reserved.</div>
   </div>
 </footer>
 
