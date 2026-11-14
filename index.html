@@ -574,6 +574,23 @@ header nav{min-height:88px;gap:24px}
 .egl-service-natural{position:relative;overflow:hidden}
 .egl-service-natural img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 .egl-service-natural::before,.egl-service-natural::after{display:none!important}
+
+/* Homepage: compact dropdown menu instead of full-height mobile sheet */
+@media(max-width:850px){
+ .egl-drawer{
+  position:fixed!important;top:76px!important;right:clamp(12px,4vw,26px)!important;
+  bottom:auto!important;left:auto!important;
+  width:min(310px,calc(100vw - 24px))!important;height:auto!important;
+  max-height:calc(100dvh - 94px)!important;overflow-y:auto!important;
+  padding:48px 20px 14px!important;border:1px solid #e0e9ed!important;
+  border-radius:16px!important;box-shadow:0 16px 48px #102a4326!important;
+  background:#fff!important;display:none;gap:0!important;
+ }
+ .egl-drawer[data-open="true"]{display:flex!important}
+ .egl-drawer .egl-close{top:9px!important;right:10px!important;font-size:13px!important}
+ .egl-drawer a{padding:9px 4px!important;min-height:0!important}
+}
+@media(max-width:480px){.egl-drawer{top:69px!important}}
 </style></head>
 
 <body>
@@ -713,9 +730,9 @@ header nav{min-height:88px;gap:24px}
       <p>Have a question about procurement, shipping, or our services? Our team is here to help.</p>
     </div>
     <div class="egl-contact-grid">
-      <div class="egl-contact-item"><span class="egl-contact-icon" aria-hidden="true">✉</span><h3>Email Us</h3><a href="mailto:sales@ersygloballogistics.com">sales@ersygloballogistics.com</a><a href="mailto:info@ersygloballogistics.com">info@ersygloballogistics.com</a></div>
-      <div class="egl-contact-item"><span class="egl-contact-icon" aria-hidden="true">☎</span><h3>Call Us</h3><a href="tel:+971556581004">+971 55 658 1004</a></div>
-      <div class="egl-contact-item"><span class="egl-contact-icon" aria-hidden="true">⌖</span><h3>Our Location</h3><p>Al Barsha Heights, Dubai Internet City<br>Dubai, United Arab Emirates</p></div>
+      <div class="egl-contact-item"><h3>Email Us</h3><a href="mailto:sales@ersygloballogistics.com">sales@ersygloballogistics.com</a><a href="mailto:info@ersygloballogistics.com">info@ersygloballogistics.com</a></div>
+      <div class="egl-contact-item"><h3>Call Us</h3><a href="tel:+971556581004">+971 55 658 1004</a></div>
+      <div class="egl-contact-item"><h3>Our Location</h3><p>Al Barsha Heights, Dubai Internet City<br>Dubai, United Arab Emirates</p></div>
     </div>
   </div>
 </section>
