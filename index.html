@@ -599,6 +599,12 @@ header nav{min-height:88px;gap:24px}
  .egl-mobile-link-icon{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none;color:#008f91}
  .egl-mobile-link-icon svg{display:block}
 }
+
+/* Narrower phone dropdown: fit the five navigation items without excess side space */
+@media(max-width:850px){
+ .egl-drawer{width:min(242px,calc(100vw - 28px))!important;padding-left:12px!important;padding-right:12px!important}
+ .egl-drawer a.egl-mobile-link{gap:10px!important;padding-left:6px!important;padding-right:4px!important}
+}
 </style></head>
 
 <body>
