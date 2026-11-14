@@ -591,6 +591,14 @@ header nav{min-height:88px;gap:24px}
  .egl-drawer a{padding:9px 4px!important;min-height:0!important}
 }
 @media(max-width:480px){.egl-drawer{top:69px!important}}
+
+/* Clean icon navigation: no divider lines */
+@media(max-width:850px){
+ .egl-drawer a.egl-mobile-link{display:flex!important;align-items:center!important;gap:13px!important;border:0!important;border-bottom:0!important;padding:10px 6px!important;min-height:44px!important;text-decoration:none!important;border-radius:9px!important}
+ .egl-drawer a.egl-mobile-link:hover,.egl-drawer a.egl-mobile-link:focus-visible{background:#eef8f9!important}
+ .egl-mobile-link-icon{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none;color:#008f91}
+ .egl-mobile-link-icon svg{display:block}
+}
 </style></head>
 
 <body>
@@ -768,7 +776,14 @@ const mount=header.querySelector('nav');mount.append(tools);
 const scrim=document.createElement('div');scrim.className='egl-scrim';scrim.hidden=true;
 const drawer=document.createElement('nav');drawer.id='egl-mobile-nav';drawer.className='egl-drawer';drawer.setAttribute('aria-label','Mobile navigation');
 const close=document.createElement('button');close.type='button';close.className='egl-icon-button egl-close';close.textContent='✕ Close';drawer.append(close);
-[['Home','/'],['Services','/services.html'],['About Us','/#about'],['Contact Us','/#contact'],['MyEGL Portal','/myegl-account.html']].forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.textContent=name;drawer.append(a)});
+const menuIcons={
+'Home':'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+'Services':'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+'About Us':'<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
+'Contact Us':'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="m3 7 9 7 9-7"/>',
+'MyEGL Portal':'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M10 8h7v8h-7m4-4H5"/>'
+};
+[['Home','/'],['Services','/services.html'],['About Us','/#about'],['Contact Us','/#contact'],['MyEGL Portal','/myegl-account.html']].forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.className='egl-mobile-link';const icon=document.createElement('span');icon.className='egl-mobile-link-icon';icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+menuIcons[name]+'</svg>';const label=document.createElement('span');label.textContent=name;a.append(icon,label);drawer.append(a)});
 document.body.append(scrim,drawer);
 const toggle=open=>{drawer.dataset.open=String(open);scrim.hidden=!open;menu.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';if(open)close.focus();else menu.focus()};
 menu.addEventListener('click',()=>toggle(true));close.addEventListener('click',()=>toggle(false));scrim.addEventListener('click',()=>toggle(false));drawer.addEventListener('click',e=>{if(e.target.closest('a'))toggle(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drawer.dataset.open==='true')toggle(false)});
