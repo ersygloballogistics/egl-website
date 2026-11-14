@@ -792,7 +792,7 @@ const menu=document.createElement('button');menu.type='button';menu.className='e
 const mount=header.querySelector('nav');mount.append(tools);
 const scrim=document.createElement('div');scrim.className='egl-scrim';scrim.hidden=true;
 const drawer=document.createElement('nav');drawer.id='egl-mobile-nav';drawer.className='egl-drawer';drawer.setAttribute('aria-label','Mobile navigation');
-const close=document.createElement('button');close.type='button';close.className='egl-icon-button egl-close';close.textContent='✕ Close';drawer.append(close);
+const close=document.createElement('button');close.type='button';close.className='egl-icon-button egl-close';close.textContent='✕';close.setAttribute('aria-label','Close menu');drawer.append(close);
 const menuIcons={
 'Home':'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
 'Services':'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
