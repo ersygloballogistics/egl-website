@@ -23,7 +23,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  const customer=record.customer_name||job.customer_name||record.customer_email||job.customer_email||'Customer';
  txt(pdf.splitTextToSize(String(customer),175).slice(0,2),15,85,11,true,ink);
  if(record.customer_address||job.customer_address)txt(pdf.splitTextToSize(record.customer_address||job.customer_address,175).slice(0,2),15,96,9,false,ink);
- hr(105);
+ hr(99);
  const rows=[];
  const candidate=record.line_items||job.line_items||job.request_details?.line_items;
  if(Array.isArray(candidate)&&candidate.length){
@@ -31,7 +31,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  }
  // Do not invent a breakdown from the example image; use one real total if no line items exist.
  if(!rows.length)rows.push({description:String(job.service_type||'Logistics services').replace(/_/g,' ')+' services',qty:1,price:isQuote?total:Number(record.subtotal??total),amount:isQuote?total:Number(record.subtotal??total)});
- let y=115;
+ let y=105;
  pdf.setFillColor(226,229,233);pdf.rect(14,y,182,11,'F');
  txt('No.',19,y+7,9,true);txt('Description',32,y+7,9,true);txt('Qty',107,y+7,9,true);txt('Unit Price ('+currency+')',149,y+7,8.2,true,ink,{align:'right'});txt('Amount ('+currency+')',192,y+7,8.2,true,ink,{align:'right'});
  y+=11;
@@ -42,12 +42,12 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   txt(money(row.price),149,y+7,9,false,ink,{align:'right'});txt(money(row.amount),192,y+7,9,false,ink,{align:'right'});
   pdf.setDrawColor(223,226,230);pdf.line(14,y+h,196,y+h);y+=h;
  }
- y=Math.max(y+12,165);
+ y=Math.max(y+10,143);
  txt('Subtotal ('+currency+')',115,y,10,true,ink,{align:'right'});txt(money(isQuote?total:(record.subtotal??total)),192,y,10,true,ink,{align:'right'});
  pdf.setFillColor(255,242,212);pdf.roundedRect(76,y+7,120,13,1,1,'F');
  txt(isQuote?'Total Quoted Amount ('+currency+')':'Total Amount Payable ('+currency+')',81,y+16,10,true,ink);
  txt(money(total),192,y+16,13,true,navy,{align:'right'});
- let bottom=Math.max(205,y+31);
+ let bottom=Math.max(179,y+31);
  if(isQuote){
   txt('Terms & Conditions',15,bottom,12,true,navy);bottom+=9;
   const terms=String(job.quotation_terms||'').split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
@@ -61,9 +61,9 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   for(const line of ['Bank: Dubai Islamic Bank (DIB)','Account Holder: ESTHER AMINU','IBAN: AE730240001523243259701','Account Number: 001523243259701']){txt(line,15,bottom,8.8);bottom+=6}
   txt('Stripe – Payment link available on request',113,bottom-27,8.6);txt('PayPal – Payment link available on request',113,bottom-15,8.6);
   bottom+=7;hr(bottom);bottom+=10;txt('Payment Terms',15,bottom,11,true,navy);bottom+=8;
-  const terms=record.due_date?'Payment due by '+date(record.due_date)+'.':'Payment terms as agreed with ERSY GLOBAL.';
+  const terms=record.due_date?'Payment due by '+date(record.due_date)+'.':'Please refer to the agreed payment terms.';
   txt('• '+terms,17,bottom,9);
-  txt('Reference: '+number,15,280,8,false,gray);
+  txt('Please include '+number+' as the payment reference.',15,Math.min(bottom+13,276),8,false,gray);
  }
  if(mode==='preview')return pdf.output('bloburl');
  pdf.save('ERSY-GLOBAL-'+(isQuote?'Quotation-':'Invoice-')+String(number).replace(/[^a-zA-Z0-9-]/g,'')+'.pdf');
