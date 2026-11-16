@@ -1,5 +1,5 @@
-import {createPaymentMethods} from './myegl-payment-methods.js?v=20261117c';
-import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117c';
+import {createPaymentMethods} from './myegl-payment-methods.js?v=20261117d';
+import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117d';
 // Customer checkout: prices and payment decisions always come from the backend.
 export async function paypalCall(db,body){
  const {data,error}=await db.functions.invoke('myegl-paypal',{body});
