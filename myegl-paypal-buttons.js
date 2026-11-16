@@ -92,7 +92,7 @@ export async function renderPayPalButtons({quote,container,call,message,onBusy=(
      try{
       // Guest card entry is a PayPal-hosted on-page overlay. Capture still requires buyer approval.
       await session.start({presentationMode:'auto',targetElement:button},createOrder());
-      if(!approved&&!blocked)feedback.textContent=method==='card'?'Card entry closed. Select Debit or Credit Card to reopen.':'Checkout closed. You can choose a payment method when ready.';
+      if(!approved&&!blocked)feedback.textContent=method==='card'?'Card entry closed. Select Card payment to reopen.':'Checkout closed. You can choose a payment method when ready.';
      }catch{await uncertain()}finally{lock(false)}
     };
     button.addEventListener('click',open);openers.set(method,open);

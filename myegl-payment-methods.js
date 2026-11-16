@@ -12,14 +12,13 @@ export function createPaymentMethods({container,renderCard,renderPayPal,renderBa
   bank:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 8 9-5 9 5v2H3V8Zm2 11h14M3 21h18M6 10v7m6-7v7m6-7v7"/></svg>'
  };
  const setBusy=value=>{busy=value;for(const row of rows)row.button.disabled=value;onBusy(value)};
- for(const [id,label,hint,render] of [['card','Card payment','Debit / credit',renderCard],['paypal','PayPal','',renderPayPal],['bank','Bank transfer','Bank details',renderBank]]){
+ for(const [id,label,hint,render] of [['card','Card payment','',renderCard],['paypal','PayPal','',renderPayPal],['bank','Bank transfer','',renderBank]]){
   const item=create('div');item.className='egl-payment-method';
   const button=create('button');button.type='button';button.className='egl-payment-toggle';button.id=groupId+'-'+id;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls',button.id+'-panel');
   const radio=create('span');radio.className='egl-payment-choice';radio.setAttribute('aria-hidden','true');
   const icon=create('span');icon.className='egl-payment-icon';icon.setAttribute('aria-hidden','true');icon.innerHTML=icons[id];
   const name=create('span',label);name.className='egl-payment-label';
-  const meta=create('span',hint);meta.className='egl-payment-hint';meta.setAttribute('aria-hidden','true');
-  const arrow=create('span','⌄');arrow.className='egl-payment-chevron';arrow.setAttribute('aria-hidden','true');button.append(radio,icon,name,meta,arrow);
+    button.append(radio,icon,name);
   const panel=create('div');panel.className='egl-payment-panel';panel.id=button.id+'-panel';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-labelledby',button.id);
   const row={id,item,button,panel,loaded:false};rows.push(row);item.append(button,panel);group.append(item);
   button.onclick=async()=>{
