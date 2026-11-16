@@ -1,6 +1,6 @@
 // ERSY GLOBAL shared quotation/invoice PDF renderer. Keep both portals in sync.
 export async function renderCommercialPDF(kind,record,job,mode='download'){
- const {jsPDF}=await import('https://cdn.jsdelivr.net/npm/jspdf@2.5.2/+esm');
+ await new Promise((ok,fail)=>{if(window.jspdf)return ok();const s=document.createElement('script');s.src='/vendor/jspdf.umd.min.js';s.onload=ok;s.onerror=()=>fail(new Error('PDF library failed to load'));document.head.append(s)});const {jsPDF}=window.jspdf;
  const pdf=new jsPDF({unit:'mm',format:'a4'}), navy=[10,29,67],gold=[227,166,43],ink=[22,28,37],gray=[98,105,116],light=[241,243,246];
  const isQuote=kind==='quotation', currency=record.currency||job.currency||'AED', total=Number(isQuote?job.quoted_total:record.total)||0;
  const money=v=>Number(v||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
