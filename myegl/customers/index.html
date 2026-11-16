@@ -83,6 +83,6 @@ target.append(status);
 
 $('previous').onclick=()=>{if(page>0){page--;void loadDirectory()}};$('next').onclick=()=>{page++;void loadDirectory()};
 let debounce;$('search').addEventListener('input',()=>{clearTimeout(debounce);debounce=setTimeout(()=>{page=0;void loadDirectory()},300)});
-if(await authCheck()){await loadDirectory();const params=new URLSearchParams(location.search);const id=params.get('customer');if(id&&/^[0-9a-f-]{36}$/i.test(id)){const {data}=await supabase.from('portal_customers').select('id,email,customer_number,approved,review_status').eq('id',id).maybeSingle();if(data){selected=data;await loadCustomer(data)}}}
+if(await authCheck()){await loadDirectory();const params=new URLSearchParams(location.search);const order=params.get('order'),kind=params.get('type');if(order&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(order)&&['job','rfq'].includes(kind)){await openOrder(kind,order)}else{const id=params.get('customer');if(id&&/^[0-9a-f-]{36}$/i.test(id)){const {data}=await supabase.from('portal_customers').select('id,email,customer_number,approved,review_status').eq('id',id).maybeSingle();if(data){selected=data;await loadCustomer(data)}}}}
 async function adminInvoicePDF(inv,job,mode='download'){const {renderCommercialPDF}=await import('/myegl-commercial-pdf.js?v=20261115c');return renderCommercialPDF('invoice',inv,job,mode)}
 </script></body></html>
