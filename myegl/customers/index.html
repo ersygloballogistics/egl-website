@@ -7,6 +7,7 @@
 <main><h1>Customer Order Workspace</h1><p class="muted">Browse registered customers by customer number or email. Select an account to review its requests and orders.</p><div class="layout"><section class="panel" aria-label="Customer directory"><h2>Customer directory</h2><label for="search">Search customers</label><input id="search" type="search" placeholder="Customer number or email"><p id="directoryCount" class="muted"></p><div id="customers"></div><div class="pagination"><button id="previous" class="secondary">Previous</button><span id="pageLabel"></span><button id="next" class="secondary">Next</button></div></section><section class="panel" aria-label="Selected customer"><div id="orderDetail" class="hidden"></div><div id="customerDetail"><h2>Select a customer</h2><p class="muted">Choose a customer from the directory to see their order history.</p></div></section></div><p id="status" role="status"></p></main>
 <script type="module">
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+import {appendAdminEmailAction} from '/myegl-admin-email.js?v=20261116a';
 const supabase=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id), el=(tag,value)=>{const e=document.createElement(tag);e.textContent=value??'';return e};
 const number=c=>'EGL-C-'+String(c.customer_number??'—').padStart(6,'0');
@@ -15,11 +16,12 @@ async function authCheck(){const {data:{user},error}=await supabase.auth.getUser
 function appendRequestAccountAccess(container,r,onChanged){
  const box=el('div','');box.className='request-account-access';
  if(!r.account_id){
-  box.append(el('p','Portal access: Registration needed. The customer must create an account and confirm their email before approval.'));
+  box.append(el('p','Portal access: Not registered. You can work with this customer by email. To use MyEGL, they must register, confirm their email and receive ERSY GLOBAL approval.'));
   const copy=el('button','Copy customer registration link');copy.type='button';copy.className='secondary';
   const note=el('p','');note.setAttribute('role','status');
   copy.onclick=async()=>{const url=location.origin+'/myegl/?register=1';try{await navigator.clipboard.writeText(url);note.textContent='Registration link copied. Ask the customer to register with '+r.customer_email+'.'}catch{note.textContent='Registration link: '+url+' — Register with '+r.customer_email;}};
   box.append(copy,note);
+  if(r.record_id)appendAdminEmailAction(box,supabase,{action:'registration',record_type:r.record_type,record_id:r.record_id});
  }else if(r.approved){box.append(el('p','Portal access: Approved.'))}
  else{
   box.append(el('p','Portal access: '+(r.review_status==='rejected'?'Registration rejected':'Awaiting ERSY GLOBAL approval')));
@@ -53,7 +55,7 @@ const target=$('orderDetail');$('customerDetail').classList.add('hidden');target
 const table=kind==='rfq'?'myegl_rfqs':'portal_jobs';const {data:r,error}=await supabase.from(table).select('*').eq('id',id).single();
 target.replaceChildren();const back=el('button','← Back to customer orders');back.className='secondary';back.onclick=()=>{target.classList.add('hidden');$('customerDetail').classList.remove('hidden')};target.append(back);
 if(error||!r){target.append(el('p','Unable to load record: '+(error?.message||'Not found')));return}
-target.append(el('h2',((kind==='rfq'||r.quote_status==='not_quoted')?'Request':'Order')+' · '+(r.reference||'No reference')));const {data:account}=await supabase.from('portal_customers').select('id,email,approved,review_status').eq('email',(r.customer_email||selected?.email||'').toLowerCase()).maybeSingle();if(kind==='job'||account)appendRequestAccountAccess(target,{account_id:account?.id,customer_email:r.customer_email||account?.email||selected?.email,approved:account?.approved,review_status:account?.review_status},()=>openOrder(kind,id));
+target.append(el('h2',((kind==='rfq'||r.quote_status==='not_quoted')?'Request':'Order')+' · '+(r.reference||'No reference')));const {data:account}=await supabase.from('portal_customers').select('id,email,approved,review_status').eq('email',(r.customer_email||selected?.email||'').toLowerCase()).maybeSingle();if(kind==='job'||account)appendRequestAccountAccess(target,{record_type:kind,record_id:id,account_id:account?.id,customer_email:r.customer_email||account?.email||selected?.email,approved:account?.approved,review_status:account?.review_status},()=>openOrder(kind,id));
 const grid=el('div','');grid.className='order-fields';target.append(grid);
 const field=(label,value)=>{const d=el('div','');d.className='order-field';d.append(el('small',label),el('strong',value===undefined||value===null||value===''?'Not provided':String(value)));grid.append(d)};
 field('Service',r.service_type);field('Origin',r.origin);field('Destination',r.destination);field('Submitted',r.created_at?new Date(r.created_at).toLocaleString():'—');field('Customer',selected?.email||r.customer_email||r.customer_id);field('Reference',r.reference);
@@ -86,7 +88,8 @@ const quoteNote=el('p','');quoteNote.setAttribute('role','status');
 const draft=el('button','Save draft quotation');draft.type='submit';quoteForm.append(draft,quoteNote);
 quoteForm.onsubmit=async e=>{e.preventDefault();draft.disabled=true;quoteNote.textContent='Saving quotation…';const {error}=await supabase.rpc('myegl_admin_prepare_quote',{p_job_id:id,p_currency:currency.value,p_total:Number(amount.value),p_services:[...[...serviceChoices].filter(([name,cb])=>cb.checked).map(([name])=>name),...(otherServices.value.trim()?[otherServices.value.trim()]:[])].join('\n'),p_terms:[...[...termChoices].filter(([name,cb])=>cb.checked).map(([name])=>name),otherTerms.value.trim()].filter(Boolean).join('\n'),p_valid_until:valid.value});if(error){quoteNote.textContent='Unable to save quotation: '+error.message;draft.disabled=false;return}if(transit.value){const update=await supabase.rpc('myegl_admin_update_shipment',{p_job_id:id,p_payment:r.payment_status||'pending',p_shipment:r.shipment_status||'not_started',p_tracking:r.tracking_number||'',p_carrier:r.tracking_carrier||'Other',p_eta:transit.value,p_pickup:r.pickup_date||null});if(update.error){quoteNote.textContent='Quote saved, but estimated transit date could not be saved: '+update.error.message;draft.disabled=false;return}}quoteNote.textContent='Draft saved. Open the order again to send it.';draft.disabled=false;void openOrder('job',id)};
 quotePanel.append(quoteForm);
-if(r.quote_status==='draft'){const send=el('button','Send quotation to customer');send.type='button';send.onclick=async()=>{if(!confirm('Publish this quotation to the customer portal and send an email notification?'))return;send.disabled=true;quoteNote.textContent='Sending quotation…';const {data,error}=await supabase.functions.invoke('myegl-send-quotation',{body:{job_id:id}});if(error||!data?.published){quoteNote.textContent='Unable to publish: '+(data?.message||error?.message||'Unknown error');send.disabled=false;return}quoteNote.textContent=data.message||'Quotation published.';void openOrder('job',id)};quotePanel.append(send)}
+if(r.quote_status==='draft'||(r.quote_status==='pending'&&!r.quotation_email_id))appendAdminEmailAction(quotePanel,supabase,{action:'quotation',job_id:id,onSent:async result=>{await openOrder('job',id);$('status').textContent=result.message;}});
+quotePanel.append(el('p','The quotation email includes its reference, amount, services and terms, plus a MyEGL account link. Customers can continue by email without registering.'));
 if(canPrepare)target.append(quotePanel);
 const opsHeading=el('h3','Shipment, payment and tracking updates');target.append(opsHeading);const pickup=el('label','');pickup.append(el('span','Pickup date'));const pickupInput=el('input','');pickupInput.type='date';pickupInput.value=r.pickup_date||'';pickup.append(pickupInput);editor.append(pickup);
 const payment=select('Payment status',r.payment_status,['not_requested','pending','unpaid','partially_paid','paid']);
