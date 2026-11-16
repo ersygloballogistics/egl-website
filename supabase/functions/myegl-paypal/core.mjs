@@ -144,7 +144,7 @@ export function makeHandler({db,authenticate,env,fetch:fetcher=fetch,log=()=>{}}
         if(!uuidRE.test(body.invoice_id||''))throw new PaymentError('Select an issued invoice.',400);
         const invoice=await db.invoice(body.invoice_id,user.id);
         const amount=checkoutAmount(invoice);
-        if(action==='quote')return reply({...amount,invoice_id:invoice.id,invoice_number:invoice.invoice_number,mode});
+        if(action==='quote')return reply({...amount,invoice_id:invoice.id,invoice_number:invoice.invoice_number,mode,client_id:client});
         let a=await db.reserve(invoice.id,user.id,mode);
         if(['capturing','pending','review_required'].includes(a.status))return reply({...receipt(a),message:'Your payment is processing or under review. Please do not pay again.'});
         if(!a.paypal_order_id){
@@ -154,7 +154,10 @@ export function makeHandler({db,authenticate,env,fetch:fetcher=fetch,log=()=>{}}
           const created=await api('/v2/checkout/orders','POST',{
             intent:'CAPTURE',purchase_units:[{reference_id:a.invoice_id,custom_id:a.id,invoice_id:invoice.invoice_number+'-'+a.id,
               description:'ERSY GLOBAL '+invoice.invoice_number,payee:{email_address:receiver},amount:{currency_code:a.paypal_currency,value:decimal(cents(a.paypal_amount))}}],
-            payment_source:{paypal:{experience_context:{brand_name:'ERSY GLOBAL',shipping_preference:'NO_SHIPPING',user_action:'PAY_NOW',return_url:returnURL.href,cancel_url:cancelURL.href}}}
+            // SDK sessions select the eligible funding method. Keep native orders neutral.
+            ...(body.checkout==='buttons'
+              ?{application_context:{brand_name:'ERSY GLOBAL',shipping_preference:'NO_SHIPPING',user_action:'PAY_NOW',return_url:returnURL.href,cancel_url:cancelURL.href}}
+              :{payment_source:{paypal:{experience_context:{brand_name:'ERSY GLOBAL',shipping_preference:'NO_SHIPPING',user_action:'PAY_NOW',return_url:returnURL.href,cancel_url:cancelURL.href}}}})
           },a.create_request_id);
           if(!providerID.test(created.id||''))throw new PaymentError('Invalid PayPal order.',502);
           // Validate the URL before persisting, and persist before returning it.
@@ -182,3 +185,4 @@ export function makeHandler({db,authenticate,env,fetch:fetcher=fetch,log=()=>{}}
     }
   };
 }
+

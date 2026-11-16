@@ -1,0 +1,14 @@
+.egl-paypal-checkout{min-width:0;overflow-wrap:anywhere}
+.egl-paypal-buttons{display:grid;gap:12px;width:100%;max-width:420px;margin:18px 0 10px}
+.egl-paypal-buttons>*{display:block;width:100%;min-width:0;min-height:48px}
+.egl-paypal-buttons paypal-basic-card-button{display:block;width:100%;min-height:48px}
+.egl-paypal-buttons paypal-button{--paypal-button-border-radius:8px}
+.egl-paypal-buttons[inert]{opacity:.65}
+.egl-paypal-fallback{background:transparent!important;color:var(--egl-ink,#102a43)!important;text-decoration:underline;padding:8px 0!important;font-size:14px!important;min-height:44px;margin:0 12px 0 0!important}
+.egl-paypal-fallback[hidden]{display:none!important}
+.egl-invoice-payments{margin:22px 0;border:1px solid var(--egl-border,#dbe5eb);border-radius:12px;padding:20px;background:var(--egl-soft,#f4f8fa)}
+.egl-invoice-payments h3{margin:0 0 8px}
+.egl-invoice-payments label{display:block;font-weight:600;margin-top:18px}
+.egl-invoice-payments select{max-width:100%;min-height:48px}
+.egl-invoice-payments a{color:inherit;text-underline-offset:3px}
+@media(max-width:600px){.egl-invoice-payments{padding:16px}.egl-paypal-buttons{max-width:100%}}

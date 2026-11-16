@@ -89,3 +89,12 @@ test('connection health is admin-only and never creates a payment',async()=>{
 });
 
 test('pending or revoked customer approvals cannot start checkout',async()=>{const h=harness({approved:false});assert.equal((await h.request({action:'create',invoice_id:invoiceID})).status,403);assert.equal(h.fetchCount,0)});
+
+test('invoice quote exposes only the public SDK client ID, never secrets or tokens',async()=>{
+ const h=harness();const response=await h.request({action:'quote',invoice_id:invoiceID});const quote=await response.json();assert.equal(response.status,200);assert.equal(quote.client_id,'fixture-client');assert.equal(quote.invoice_id,invoiceID);assert.equal(quote.amount,'100.00');assert.equal(h.fetchCount,0);assert.ok(!JSON.stringify(quote).includes('fixture-secret'));assert.ok(!JSON.stringify(quote).includes('fixture-token'));
+});
+
+test('native checkout creates a funding-neutral order with the same locked invoice price',async()=>{
+ const h=harness({attempt:{paypal_order_id:null,status:'creating'}});const r=await h.request({action:'create',invoice_id:invoiceID,checkout:'buttons',amount:0.01});assert.equal(r.status,200);
+ const payload=JSON.parse(h.calls.find(x=>x.url.endsWith('/v2/checkout/orders')).init.body);assert.equal(payload.payment_source,undefined);assert.deepEqual(payload.purchase_units[0].amount,{currency_code:'USD',value:'100.00'});assert.equal(payload.purchase_units[0].payee.email_address,'sales@ersygloballogistics.com');assert.match(payload.application_context.return_url,/type=job/);assert.equal(h.creditCount,0);
+});
