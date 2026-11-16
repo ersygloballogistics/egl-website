@@ -15,8 +15,8 @@
  syncViewport();
 })();
 </script>
-<script type="module">
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+<script src="/vendor/supabase-js-2.49.4.js"></script><script type="module">
+const {createClient}=window.supabase;
 import {showPaymentMethods,completePayPalReturn} from '/myegl-paypal.js?v=20261117c';
 const db=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true}});
 const $=id=>document.getElementById(id);const el=(tag,value)=>{const x=document.createElement(tag);x.textContent=value??'';return x};
