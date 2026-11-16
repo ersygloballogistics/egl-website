@@ -59,7 +59,7 @@ export function createHandler({ createClient, env, sendEmail = fetch, now = () =
     if (error || !record) return respond(404, "Request not found");
     let account = null;
     if (record.customer_id) {
-      const result = await admin.from("portal_customers").select("id,email,approved").eq("id", record.customer_id).maybeSingle();
+      const result = await client.from("portal_customers").select("id,email,approved").eq("id", record.customer_id).maybeSingle();
       if (result.error) return respond(500, "Unable to check the customer account");
       account = result.data;
     }
@@ -67,7 +67,7 @@ export function createHandler({ createClient, env, sendEmail = fetch, now = () =
     if (typeof record.customer_email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.customer_email) || /[\r\n]/.test(record.reference || "")) return respond(409, "A valid customer email and request reference are required");
     if (!account) {
       const literalEmail = record.customer_email.trim().replace(/[\\%_]/g, value => "\\" + value);
-      const result = await admin.from("portal_customers").select("id,email,approved").ilike("email", literalEmail).maybeSingle();
+      const result = await client.from("portal_customers").select("id,email,approved").ilike("email", literalEmail).maybeSingle();
       if (result.error) return respond(500, "Unable to check the customer account");
       account = result.data;
     }
