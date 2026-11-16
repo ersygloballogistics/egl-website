@@ -1,5 +1,5 @@
-import {createPaymentMethods} from './myegl-payment-methods.js?v=20261117b';
-import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117b';
+import {createPaymentMethods} from './myegl-payment-methods.js?v=20261117c';
+import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117c';
 // Customer checkout: prices and payment decisions always come from the backend.
 export async function paypalCall(db,body){
  const {data,error}=await db.functions.invoke('myegl-paypal',{body});
@@ -26,12 +26,19 @@ export async function showPayPal({db,job,user,container,invoiceId,onBusy,method}
   const invoice=invoices?.find(i=>(!invoiceId||i.id===invoiceId)&&Number(i.total)>Number(i.amount_paid));
   if(!invoice){note.textContent=job.payment_status==='paid'?'This order is paid.':'Payment options will be available when ERSY GLOBAL issues your invoice.';return}
   const quote=await paypalCall(db,{action:'quote',invoice_id:invoice.id});
-  note.textContent='Invoice '+quote.invoice_number+' · Balance '+money(quote.invoice_amount,quote.invoice_currency);
-  container.append(node('p',(method==='card'?'Card checkout: ':'Pay with PayPal: ')+money(quote.amount,quote.currency)));
-  if(quote.aed_per_usd)container.append(node('p','Your AED balance is converted at 1 USD = '+quote.aed_per_usd+' AED.'));
-  container.append(node('p',method==='card'?'Card details are entered securely through PayPal. Currency conversion charges may apply.':'Review and confirm your payment on PayPal. Currency conversion charges may apply.'));
-  await renderPayPalButtons({quote,container,call:body=>paypalCall(db,body),message:paymentMessage,onBusy,
+  if(method==='card'){
+   note.className='egl-card-total';note.textContent='Total to pay: '+money(quote.amount,quote.currency);
+   const reference=node('small','Invoice '+quote.invoice_number+' · '+money(quote.invoice_amount,quote.invoice_currency));reference.className='egl-card-reference';container.append(reference);
+   if(quote.aed_per_usd){const conversion=node('details');conversion.className='egl-card-conversion';conversion.append(node('summary','Exchange rate and fees'),node('p','1 USD = '+quote.aed_per_usd+' AED. PayPal or your bank may apply currency conversion charges.'));container.append(conversion)}
+  }else{
+   note.textContent='Invoice '+quote.invoice_number+' · Balance '+money(quote.invoice_amount,quote.invoice_currency);
+   container.append(node('p','Pay with PayPal: '+money(quote.amount,quote.currency)));
+   if(quote.aed_per_usd)container.append(node('p','Your AED balance is converted at 1 USD = '+quote.aed_per_usd+' AED.'));
+   container.append(node('p','Review and confirm your payment on PayPal. Currency conversion charges may apply.'));
+  }
+  return await renderPayPalButtons({quote,container,call:body=>paypalCall(db,body),message:paymentMessage,onBusy,
    allowedMethods:method==='card'?['card']:method==='paypal'?['paypal','paylater','credit','venmo']:undefined,
+   autoOpenMethod:method==='card'?'card':undefined,
    allowRedirectFallback:method!=='card',onUnavailable:()=>{if(method==='card')appendCardLinkRequest({db,job,container})}
   });
  }catch(e){note.textContent=e.message}

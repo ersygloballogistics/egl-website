@@ -44,3 +44,9 @@
 .egl-card-link-request{min-height:44px}
 @media(max-width:600px){.egl-payment-methods .egl-payment-toggle{grid-template-columns:18px 38px minmax(0,1fr) 14px;gap:9px;padding:15px 14px;min-height:70px;font-size:15px}.egl-payment-hint{display:none}.egl-payment-panel{padding:0 14px 18px}.egl-bank-details{grid-template-columns:minmax(0,1fr);gap:3px}.egl-bank-details dd{margin-bottom:10px}.egl-payment-choice{width:18px;height:18px}}
 @media(prefers-reduced-motion:reduce){.egl-payment-chevron{transition:none}}
+
+.egl-payment-panel .egl-card-total{font-size:18px;font-weight:700;margin:6px 0 4px}
+.egl-card-reference{color:var(--egl-muted,#53687a);font-size:13px;margin-bottom:10px}
+.egl-card-conversion{font-size:12px;color:var(--egl-muted,#53687a);margin:8px 0 12px}
+.egl-card-conversion summary{cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px 0}
+.egl-card-conversion p{font-size:12px;margin:6px 0}

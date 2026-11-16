@@ -1,4 +1,4 @@
-// Compact, keyboard-accessible payment method selector. No payment starts here.
+// Keyboard-accessible method selector. Selecting Card opens secure card entry; approval is still required.
 const create=(tag,text='')=>{const e=document.createElement(tag);e.textContent=text;return e};
 let sequence=0;
 export function createPaymentMethods({container,renderCard,renderPayPal,renderBank,onBusy=()=>{},showHeading=true}){
@@ -28,8 +28,8 @@ export function createPaymentMethods({container,renderCard,renderPayPal,renderBa
    for(const other of rows){other.panel.hidden=true;other.button.setAttribute('aria-expanded','false');other.item.classList.remove('is-open')}
    if(!opening)return;
    panel.hidden=false;button.setAttribute('aria-expanded','true');item.classList.add('is-open');
-   if(row.loaded)return;row.loaded=true;
-   try{await render(panel,setBusy)}catch{panel.append(create('p','Unable to load this payment option. Please refresh or choose another method.'))}
+   if(row.loaded){await row.openCard?.();return}row.loaded=true;
+   try{const view=await render(panel,setBusy);row.openCard=view?.openCard}catch{panel.append(create('p','Unable to load this payment option. Please refresh or choose another method.'))}
   };
  }
  return {setBusy};

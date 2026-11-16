@@ -18,13 +18,13 @@ export async function loadPayPalSDK(clientId){
  return instances.get(clientId);
 }
 
-export async function renderPayPalButtons({quote,container,call,message,onBusy=()=>{},getSDK=loadPayPalSDK,allowedMethods,allowRedirectFallback=true,onUnavailable=()=>{}}){
+export async function renderPayPalButtons({quote,container,call,message,onBusy=()=>{},getSDK=loadPayPalSDK,allowedMethods,allowRedirectFallback=true,onUnavailable=()=>{},autoOpenMethod}){
  const stack=make('div');stack.className='egl-paypal-buttons';
  const feedback=make('p','Loading secure payment options…');feedback.setAttribute('role','status');
  const fallback=make('button','Open PayPal checkout');fallback.type='button';fallback.className='egl-paypal-fallback';fallback.hidden=true;
  container.append(stack,feedback,fallback);
  let busy=false,blocked=false,orderId,approved=false;
- const buttons=[];
+ const buttons=[],openers=new Map();
  const lock=value=>{busy=value;onBusy(value);stack.inert=value||blocked;for(const b of buttons){b.disabled=value||blocked;b.setAttribute('aria-disabled',String(value||blocked))}fallback.disabled=value||blocked;stack.setAttribute('aria-busy',String(value))};
  const check=async()=>{
   if(!orderId)return;
@@ -86,18 +86,21 @@ export async function renderPayPalButtons({quote,container,call,message,onBusy=(
     if(['paylater','credit'].includes(method)){const details=eligible.getDetails(method);if(details?.productCode)button.productCode=details.productCode;if(details?.countryCode)button.countryCode=details.countryCode}
     buttons.push(button);
     if(method==='card'){const wrapper=make('paypal-basic-card-container');wrapper.append(button);stack.append(wrapper)}else stack.append(button);
-    button.addEventListener('click',async()=>{
-     if(busy||blocked)return;lock(true);approved=false;feedback.textContent='Opening secure checkout…';
+    const open=async()=>{
+     if(busy||blocked||container.hidden||container.isConnected===false)return;
+     lock(true);approved=false;feedback.textContent=method==='card'?'Opening secure card entry…':'Opening secure checkout…';
      try{
-      // Start immediately on the click, before awaiting the server, to keep popup permission.
+      // Guest card entry is a PayPal-hosted on-page overlay. Capture still requires buyer approval.
       await session.start({presentationMode:'auto',targetElement:button},createOrder());
-      if(!approved&&!blocked)feedback.textContent='Checkout closed. You can choose a payment method when ready.';
+      if(!approved&&!blocked)feedback.textContent=method==='card'?'Card entry closed. Select Debit or Credit Card to reopen.':'Checkout closed. You can choose a payment method when ready.';
      }catch{await uncertain()}finally{lock(false)}
-    });
+    };
+    button.addEventListener('click',open);openers.set(method,open);
    }catch{/* One unavailable method must not hide other eligible methods. */}
   }
   feedback.textContent=buttons.length?'':allowRedirectFallback?'PayPal checkout is available in a separate window.':'Card payment is unavailable here. Please choose another method or request a payment link.';
   if(!buttons.length)unavailable();
  }catch{feedback.textContent=allowRedirectFallback?'PayPal buttons could not load. You can open secure PayPal checkout instead.':'Card checkout could not load. Please choose another method or request a payment link.';unavailable()}
- return {isBusy:()=>busy};
+ if(autoOpenMethod&&openers.has(autoOpenMethod)&&!container.hidden&&container.isConnected!==false)await openers.get(autoOpenMethod)();
+ return {isBusy:()=>busy,openCard:openers.get('card')};
 }

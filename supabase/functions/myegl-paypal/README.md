@@ -54,3 +54,16 @@ The customer account and order page use the same three collapsed rows: **Card pa
 Card payment renders only the eligible PayPal-hosted guest card button. The PayPal row contains wallet and eligible Pay Later/Credit/Venmo methods, without duplicating the guest card button. Stripe is not presented as an activated checkout: if card checkout is unavailable, the existing manual Stripe-link request remains available under the customer label "Request a card payment link". No Stripe settings, backend payment rules, invoice amounts or bank details changed.
 
 Validation for this layout update: nine isolated interaction checks using the actual frontend modules and an in-memory DOM, plus syntax checks of the affected modules and page scripts. Run `node --test tests/payment-methods.test.mjs` to repeat the selector checks. Browser visual QA was unavailable in this session. No order was created or payment captured while testing this layout.
+
+
+## Direct card-entry opening
+
+Selecting the Card payment row now opens PayPal's hosted guest card-entry overlay automatically after invoice and eligibility checks. It collects card number, expiry and CVV in PayPal's environment. The application does not render or read raw card inputs. Reopening the row can reopen the same session after cancellation. A native card button remains as a retry control if the browser cannot launch the overlay automatically.
+
+The card panel shows a concise checkout total and invoice reference. Currency conversion and potential provider/bank fees remain available in a collapsed detail. Account and order views use the same flow.
+
+The card overlay cannot start from initial page load or from a card panel hidden during asynchronous initialization. Invoice and method selection lock while the provider form is active. Selecting a card method creates or reuses an invoice-bound checkout order; only customer approval in the provider form can lead to the existing verified capture flow. Unissued, reviewed or server-rejected invoices cannot open the form. PayPal wallet and bank rows do not start checkout merely by opening.
+
+This uses the existing PayPal guest-card product, not Expanded Checkout's permanently embedded card fields. Expanded Checkout requires separate eligibility/merchant approval. No Stripe settings or backend payment rules were changed.
+
+Validation: twelve isolated interaction checks using the actual modules, including direct form opening, cancellation/reopen, no hidden/background launch, duplicate-click locking, pending capture, amount integrity and no raw-card-data transmission; affected module and page syntax checks. Browser visual verification and a completed real-provider payment were unavailable in this session. No real order or payment was created while testing. Repeat with `node --test tests/payment-methods.test.mjs`.
