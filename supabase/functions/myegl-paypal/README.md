@@ -45,3 +45,12 @@ The authenticated, invoice-owned `quote` response includes the browser-safe live
 Native sessions create funding-neutral Orders v2 orders (`checkout: buttons`), then use the existing verified server capture and webhook ledger. Prices and recipient are never accepted from the browser. A single active checkout disables competing funding buttons and invoice selection. Pending or uncertain captures require a status check before another attempt. A small secure redirect fallback remains if SDK loading fails. Draft invoices remain unpayable.
 
 Verification for this update: 25 isolated server/UI tests; JavaScript syntax checks; actual live SDK button rendering against the business's public client ID in a private, clearly labelled fixture preview at desktop and 390px phone width. The preview had no live invoice, order-creation or capture path. A full provider buyer/capture session was not performed and no customer was charged.
+
+
+## Compact payment method selector
+
+The customer account and order page use the same three collapsed rows: **Card payment**, **PayPal**, and **Bank transfer**. One row opens at a time. Controls use real buttons with aria-expanded and labelled regions; the radio-style indicator is decorative. Bank details and the existing order reference load only when the bank row opens. Mobile styles retain full-width touch targets and wrap long account details.
+
+Card payment renders only the eligible PayPal-hosted guest card button. The PayPal row contains wallet and eligible Pay Later/Credit/Venmo methods, without duplicating the guest card button. Stripe is not presented as an activated checkout: if card checkout is unavailable, the existing manual Stripe-link request remains available under the customer label "Request a card payment link". No Stripe settings, backend payment rules, invoice amounts or bank details changed.
+
+Validation for this layout update: nine isolated interaction checks using the actual frontend modules and an in-memory DOM, plus syntax checks of the affected modules and page scripts. Run `node --test tests/payment-methods.test.mjs` to repeat the selector checks. Browser visual QA was unavailable in this session. No order was created or payment captured while testing this layout.

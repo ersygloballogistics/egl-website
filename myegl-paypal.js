@@ -1,4 +1,5 @@
-import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117a';
+import {createPaymentMethods} from './myegl-payment-methods.js?v=20261117b';
+import {renderPayPalButtons} from './myegl-paypal-buttons.js?v=20261117b';
 // Customer checkout: prices and payment decisions always come from the backend.
 export async function paypalCall(db,body){
  const {data,error}=await db.functions.invoke('myegl-paypal',{body});
@@ -8,9 +9,9 @@ export async function paypalCall(db,body){
 }
 const node=(tag,text)=>{const e=document.createElement(tag);e.textContent=text||'';return e};
 const money=(value,currency)=>currency+' '+Number(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-export async function showPayPal({db,job,user,container,invoiceId,onBusy}){
+export async function showPayPal({db,job,user,container,invoiceId,onBusy,method}){
  container.classList.add('egl-paypal-checkout');
- container.append(node('strong','PayPal'));
+ if(!method)container.append(node('strong','PayPal'));
  const note=node('p','Checking your invoice…');container.append(note);
  try{
   const {data:attempts,error:receiptError}=await db.from('myegl_paypal_orders').select('status,paypal_order_id,capture_id').eq('job_id',job.id).eq('customer_id',user.id).eq('mode','live').in('status',['capturing','pending','review_required']).limit(1);
@@ -23,13 +24,16 @@ export async function showPayPal({db,job,user,container,invoiceId,onBusy}){
   const {data:invoices,error}=await db.from('myegl_invoices').select('id,invoice_number,status,total,amount_paid,currency').eq('job_id',job.id).eq('customer_id',user.id).in('status',['issued','partially_paid']).order('created_at',{ascending:false});
   if(error)throw new Error('Unable to load your invoice. Please try again.');
   const invoice=invoices?.find(i=>(!invoiceId||i.id===invoiceId)&&Number(i.total)>Number(i.amount_paid));
-  if(!invoice){note.textContent=job.payment_status==='paid'?'This order is paid.':'PayPal payment will be available when ERSY GLOBAL issues your invoice.';return}
+  if(!invoice){note.textContent=job.payment_status==='paid'?'This order is paid.':'Payment options will be available when ERSY GLOBAL issues your invoice.';return}
   const quote=await paypalCall(db,{action:'quote',invoice_id:invoice.id});
   note.textContent='Invoice '+quote.invoice_number+' · Balance '+money(quote.invoice_amount,quote.invoice_currency);
-  container.append(node('p','Pay with PayPal: '+money(quote.amount,quote.currency)));
+  container.append(node('p',(method==='card'?'Card checkout: ':'Pay with PayPal: ')+money(quote.amount,quote.currency)));
   if(quote.aed_per_usd)container.append(node('p','Your AED balance is converted at 1 USD = '+quote.aed_per_usd+' AED.'));
-  container.append(node('p','Review and confirm your payment on PayPal. Your bank or PayPal may apply currency conversion charges.'));
-  await renderPayPalButtons({quote,container,call:body=>paypalCall(db,body),message:paymentMessage,onBusy});
+  container.append(node('p',method==='card'?'Card details are entered securely through PayPal. Currency conversion charges may apply.':'Review and confirm your payment on PayPal. Currency conversion charges may apply.'));
+  await renderPayPalButtons({quote,container,call:body=>paypalCall(db,body),message:paymentMessage,onBusy,
+   allowedMethods:method==='card'?['card']:method==='paypal'?['paypal','paylater','credit','venmo']:undefined,
+   allowRedirectFallback:method!=='card',onUnavailable:()=>{if(method==='card')appendCardLinkRequest({db,job,container})}
+  });
  }catch(e){note.textContent=e.message}
 }
 export function paymentMessage(result){
@@ -62,7 +66,7 @@ export async function showAccountPayments({db,user,container,invoices,jobs}){
  container.replaceChildren();container.className='egl-invoice-payments';
  container.append(node('h3','Invoices and payments'));
  const payable=(invoices||[]).filter(i=>['issued','partially_paid'].includes(i.status)&&Number(i.total)>Number(i.amount_paid));
- if(!payable.length){container.append(node('p','No unpaid issued invoices. PayPal payment options appear here when ERSY GLOBAL issues your invoice.'));return}
+ if(!payable.length){container.append(node('p','No unpaid issued invoices. Payment methods appear here when ERSY GLOBAL issues your invoice.'));return}
  const label=node('label','Choose an invoice to pay'),select=node('select');select.id='myegl-payment-invoice';label.htmlFor=select.id;
  const jobMap=new Map((jobs||[]).map(j=>[j.id,j]));
  for(const invoice of payable){const option=node('option',invoice.invoice_number+' · '+money(Number(invoice.total)-Number(invoice.amount_paid),invoice.currency)+' · '+(jobMap.get(invoice.job_id)?.reference||'Order'));option.value=invoice.id;select.append(option)}
@@ -73,7 +77,36 @@ export async function showAccountPayments({db,user,container,invoices,jobs}){
   if(!job){checkout.append(node('p','Unable to load this order. Please refresh or contact ERSY GLOBAL.'));return}
   const link=node('a','View order and invoice');link.href='/myegl/order/?type=job&id='+encodeURIComponent(job.id);checkout.append(link);
   const pane=node('div');checkout.append(pane);
-  await showPayPal({db,job,user,container:pane,invoiceId:invoice.id,onBusy:busy=>{select.disabled=busy}});
+  showPaymentMethods({db,job,user,container:pane,invoiceId:invoice.id,onBusy:busy=>{select.disabled=busy}});
  };
  select.onchange=render;await render();
+}
+
+function appendCardLinkRequest({db,job,container}){
+ if(container.querySelector('.egl-card-link-request'))return;
+ const request=node('button','Request a card payment link');request.type='button';request.className='egl-card-link-request';
+ const status=node('p');status.setAttribute('role','status');container.append(request,status);
+ request.onclick=async()=>{
+  request.disabled=true;status.textContent='Submitting your request…';
+  try{const {data,error}=await db.rpc('myegl_request_stripe_link',{p_job_id:job.id});
+   if(error||!data?.ok)throw new Error('Unable to submit your request. Please try again.');
+   request.textContent='Payment link requested';status.textContent='ERSY GLOBAL will contact you with your secure payment link.';
+  }catch{status.textContent='Unable to request a card payment link. Please try again or contact ERSY GLOBAL.';request.disabled=false}
+ };
+}
+export function showPaymentMethods({db,job,user,container,invoiceId,onBusy,showHeading=true}){
+ container.classList.add('egl-payment-checkout');
+ return createPaymentMethods({
+  container,onBusy,showHeading,
+  renderCard:(panel,setBusy)=>showPayPal({db,job,user,container:panel,invoiceId,method:'card',onBusy:setBusy}),
+  renderPayPal:(panel,setBusy)=>showPayPal({db,job,user,container:panel,invoiceId,method:'paypal',onBusy:setBusy}),
+  renderBank:panel=>{
+   if(job.payment_status==='paid'){panel.append(node('p','This order is paid.'));return}
+   const bank=node('dl');bank.className='egl-bank-details';
+   for(const [label,value] of [['Account holder','ESTHER AMINU'],['Bank','Dubai Islamic Bank (DIB)'],['IBAN','AE730240001523243259701'],['Account number','001523243259701'],['Payment reference',job.reference]]){
+    bank.append(node('dt',label),node('dd',value||'Please contact ERSY GLOBAL'));
+   }
+   panel.append(bank,node('p','Please include the payment reference in your transfer description.'));
+  }
+ });
 }

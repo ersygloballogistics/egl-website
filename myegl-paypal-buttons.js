@@ -18,7 +18,7 @@ export async function loadPayPalSDK(clientId){
  return instances.get(clientId);
 }
 
-export async function renderPayPalButtons({quote,container,call,message,onBusy=()=>{},getSDK=loadPayPalSDK}){
+export async function renderPayPalButtons({quote,container,call,message,onBusy=()=>{},getSDK=loadPayPalSDK,allowedMethods,allowRedirectFallback=true,onUnavailable=()=>{}}){
  const stack=make('div');stack.className='egl-paypal-buttons';
  const feedback=make('p','Loading secure payment options…');feedback.setAttribute('role','status');
  const fallback=make('button','Open PayPal checkout');fallback.type='button';fallback.className='egl-paypal-fallback';fallback.hidden=true;
@@ -35,9 +35,10 @@ export async function renderPayPalButtons({quote,container,call,message,onBusy=(
  };
  const checkButton=make('button','Check payment status');checkButton.type='button';checkButton.hidden=true;checkButton.className='egl-paypal-fallback';container.append(checkButton);
  checkButton.onclick=async()=>{checkButton.disabled=true;try{await check()}catch{feedback.textContent='Unable to confirm payment status. Please contact ERSY GLOBAL before paying again.'}finally{checkButton.disabled=false}};
+ const unavailable=()=>{if(allowRedirectFallback)fallback.hidden=false;else onUnavailable()};
  const uncertain=async()=>{
   if(blocked&&!orderId)return;
-  if(!orderId){feedback.textContent='PayPal checkout could not open. Please try again or use Open PayPal checkout.';fallback.hidden=false;return}
+  if(!orderId){feedback.textContent='Secure checkout could not open. Please try again or choose another payment method.';unavailable();return}
   blocked=true;checkButton.hidden=false;
   try{await check()}catch{feedback.textContent='Unable to confirm payment status. Please check before paying again.'}
  };
@@ -78,7 +79,7 @@ export async function renderPayPalButtons({quote,container,call,message,onBusy=(
    ['venmo','venmo-button','createVenmoOneTimePaymentSession','Pay with Venmo']
   ];
   for(const [method,tag,factory,label] of methods){
-   if(!eligible.isEligible(method)||typeof sdk[factory]!=='function')continue;
+   if((allowedMethods&&!allowedMethods.includes(method))||!eligible.isEligible(method)||typeof sdk[factory]!=='function')continue;
    try{
     const session=await sdk[factory](callbacks),button=make(tag);button.setAttribute('type','pay');button.setAttribute('aria-label',label);
     if(method==='paypal')button.className='paypal-gold';
@@ -95,8 +96,8 @@ export async function renderPayPalButtons({quote,container,call,message,onBusy=(
     });
    }catch{/* One unavailable method must not hide other eligible methods. */}
   }
-  feedback.textContent=buttons.length?'Choose a secure payment option.':'PayPal checkout is available in a separate window.';
-  if(!buttons.length)fallback.hidden=false;
- }catch{feedback.textContent='PayPal buttons could not load. You can open secure PayPal checkout instead.';fallback.hidden=false}
+  feedback.textContent=buttons.length?'':allowRedirectFallback?'PayPal checkout is available in a separate window.':'Card payment is unavailable here. Please choose another method or request a payment link.';
+  if(!buttons.length)unavailable();
+ }catch{feedback.textContent=allowRedirectFallback?'PayPal buttons could not load. You can open secure PayPal checkout instead.':'Card checkout could not load. Please choose another method or request a payment link.';unavailable()}
  return {isBusy:()=>busy};
 }
