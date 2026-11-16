@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.49.4";
+import { createQuotationAttachment } from "./quotation-pdf.ts";
 
 const site = "https://www.ersygloballogistics.com";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -7,33 +8,23 @@ const lines = value => Array.isArray(value) ? value.map(String) : String(value |
 const digest = async value => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value))), b => b.toString(16).padStart(2, "0")).join("");
 
 export function buildEmail(record, action, account) {
-  const registrationUrl = site + "/myegl/?register=1";
-  const signInUrl = site + "/myegl/";
+  const link = site + (account ? "/myegl/" : "/myegl/?register=1");
   const reference = String(record.reference || "Your request");
-  const service = String(record.service_type || "Requested service").replaceAll("-", " ");
-  const content = ["ERSY GLOBAL", "", action === "quotation" ? "Your quotation" : "Thank you for your request", "", "Reference: " + reference, "Service: " + service];
-  if (record.origin || record.destination) content.push("Route: " + (record.origin || "To be confirmed") + " → " + (record.destination || "To be confirmed"));
-  if (action === "quotation") {
-    content.push("", "Quotation amount: " + record.currency + " " + Number(record.quoted_total).toFixed(2), "Valid until: " + record.quotation_valid_until);
-    if (record.estimated_transit_date) content.push("Estimated transit / delivery date: " + record.estimated_transit_date);
-    const services = lines(record.included_services);
-    if (services.length) content.push("", "Included services", ...services.map(value => "• " + value));
-    const terms = lines(record.quotation_terms);
-    if (terms.length) content.push("", "Scope and terms", ...terms);
-    content.push("", "You can reply to this email with questions or to confirm whether you accept this quotation. Our team will confirm the next steps. No payment is requested by this email.");
-  } else content.push("", "We have received your request. You can continue working with our team by replying to this email.");
-  content.push("", "Your MyEGL account (optional)");
-  if (!account) content.push("To view your requests, quotations and shipment updates in MyEGL, please create an account using " + record.customer_email + ".", "Create your account:", registrationUrl, "Confirm your email address, then ERSY GLOBAL will review your registration. Portal access requires approval.");
-  else if (!account.approved) content.push("Your account is awaiting ERSY GLOBAL approval. You can continue with us by email while your portal access is reviewed.", "MyEGL sign in:", signInUrl);
-  else content.push("You can also review your requests and quotations in MyEGL.", "MyEGL sign in:", signInUrl);
-  content.push("", "A MyEGL account is not required to work with ERSY GLOBAL by email.", "Please include reference " + reference + " in your reply.", "", "ERSY GLOBAL", "sales@ersygloballogistics.com", site);
-  const text = content.join("\n");
-  const link = account ? signInUrl : registrationUrl;
-  const html = '<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#102a43"><div style="background:#0b2239;color:white;padding:20px;font-size:22px;font-weight:bold">ERSY <span style="color:#42d4d2">GLOBAL</span></div><div style="padding:22px;border:1px solid #dbe5eb"><div style="white-space:pre-wrap;line-height:1.6;overflow-wrap:anywhere">' + escape(text) + '</div><p style="margin-top:24px"><a href="' + link + '" style="display:inline-block;background:#008f91;color:white;padding:12px 18px;border-radius:6px;text-decoration:none">' + (account ? "Open MyEGL" : "Create your MyEGL account") + '</a></p><p><a href="mailto:sales@ersygloballogistics.com">Email ERSY GLOBAL</a></p></div></div>';
-  return { to: String(record.customer_email).trim().toLowerCase(), subject: (action === "quotation" ? "Your ERSY GLOBAL quotation – " : "Your ERSY GLOBAL request and MyEGL account – ") + reference, text, html };
+  const names = {"shop-ship":"Shop & Ship","buy-for-me":"Buy For Me","freight":"Freight Forwarding","procurement":"Procurement & Sourcing","warehousing":"Warehousing & Fulfillment"};
+  const service = names[record.service_type] || String(record.service_type || "Requested service").replaceAll("-", " ");
+  const next = !account
+    ? "To view and approve your quotation and follow shipment updates, please create a MyEGL account using this email address."
+    : account.approved
+      ? "To view and approve your quotation and follow shipment updates, please sign in to MyEGL."
+      : "To view and approve your quotation, please sign in to MyEGL once your account is approved.";
+  const text = ["Thank you for your request.", "", "Reference: " + reference, "Service: " + service,
+    "Route: " + (record.origin || "To be confirmed") + " → " + (record.destination || "To be confirmed"),
+    "", "Please find your quotation attached.", "", next, link, "", "ERSY GLOBAL"].join("\n");
+  const html = '<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#102a43;line-height:1.6"><h2 style="color:#0b2239">ERSY GLOBAL</h2><p>Thank you for your request.</p><p><strong>Reference:</strong> ' + escape(reference) + '<br><strong>Service:</strong> ' + escape(service) + '<br><strong>Route:</strong> ' + escape(record.origin || 'To be confirmed') + ' → ' + escape(record.destination || 'To be confirmed') + '</p><p>Please find your quotation attached.</p><p>' + escape(next) + '</p><p><a href="' + link + '" style="color:#008f91;font-weight:bold">' + (account ? 'View quotation in MyEGL' : 'Create your MyEGL account') + '</a></p><p>ERSY GLOBAL</p></div>';
+  return { to: String(record.customer_email).trim().toLowerCase(), subject: "Your ERSY GLOBAL quotation – " + reference, text, html };
 }
 
-export function createHandler({ createClient, env, sendEmail = fetch, now = () => new Date() }) {
+export function createHandler({ createClient, env, sendEmail = fetch, now = () => new Date(), createAttachment = createQuotationAttachment }) {
   return async req => {
     const origin = req.headers.get("origin");
     const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": origin === site || origin === "https://ersygloballogistics.com" ? origin : site, "Access-Control-Allow-Headers": "authorization,apikey,content-type,x-client-info", "Access-Control-Allow-Methods": "POST,OPTIONS", "Vary": "Origin" };
@@ -50,7 +41,7 @@ export function createHandler({ createClient, env, sendEmail = fetch, now = () =
     if (user.app_metadata?.myegl_role !== "admin") return respond(403, "Administrator access required");
     let body; try { body = await req.json(); } catch { return respond(400, "Invalid request"); }
     const action = body.action || "quotation";
-    if (!["quotation", "registration"].includes(action)) return respond(400, "Invalid email action");
+    if (action !== "quotation") return respond(400, "Please use Send quotation to email the quotation and account link together.");
     const isJob = typeof body.job_id === "string" && uuid.test(body.job_id);
     const isRfq = typeof body.rfq_id === "string" && uuid.test(body.rfq_id);
     if (isJob === isRfq || (action === "quotation" && !isJob)) return respond(400, "Select one valid request");
@@ -72,15 +63,21 @@ export function createHandler({ createClient, env, sendEmail = fetch, now = () =
       account = result.data;
     }
     if (action === "registration" && account) return respond(409, "The customer already has an account. Review its approval status instead.");
+    const issueDate = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Dubai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now());
     if (action === "quotation") {
       if (!(record.quote_status === "draft" || (record.quote_status === "pending" && !record.quotation_email_id))) return respond(409, "Save a draft quotation before emailing. This quotation may already have been sent.");
-      if (!Number.isFinite(Number(record.quoted_total)) || Number(record.quoted_total) <= 0 || !record.currency || !record.quotation_valid_until || String(record.quotation_valid_until) < now().toISOString().slice(0, 10)) return respond(409, "Save a quotation with a positive amount, currency and current validity date before emailing.");
+      if (!Number.isFinite(Number(record.quoted_total)) || Number(record.quoted_total) <= 0 || !record.currency || !record.quotation_valid_until || String(record.quotation_valid_until) < issueDate) return respond(409, "Save a quotation with a positive amount, currency and current validity date before emailing.");
     }
     const mail = buildEmail(record, action, account);
-    const fingerprint = await digest(JSON.stringify(mail));
-    if (body.preview === true) return respond(200, { email_preview: { to: mail.to, subject: mail.subject, text: mail.text, fingerprint }, email_sent: false });
+    const snapshot = {reference:record.reference,customer_email:record.customer_email,customer_name:record.customer_name,request_details:record.request_details,service_type:record.service_type,origin:record.origin,destination:record.destination,currency:record.currency,quoted_total:record.quoted_total,quotation_valid_until:record.quotation_valid_until,estimated_transit_date:record.estimated_transit_date,included_services:record.included_services,quotation_terms:record.quotation_terms};
+    const fingerprint = await digest(JSON.stringify({mail,pdf:snapshot,issueDate,version:'attached-quotation-v1'}));
     if (body.expected_hash && body.expected_hash !== fingerprint) return respond(409, "The quotation or customer account changed. Open a new email preview before sending.");
-    if (action === "registration" && !body.expected_hash) return respond(400, "Review the email preview before sending.");
+    if (body.preview !== true && !body.expected_hash) return respond(400, "Review the quotation email and attachment before sending.");
+    let attachment;
+    try { attachment = await createAttachment(record,issueDate); }
+    catch { return respond(500, "The quotation PDF could not be prepared. Nothing was sent."); }
+    if (!attachment?.content || !attachment?.filename) return respond(500, "The quotation PDF is missing. Nothing was sent.");
+    if (body.preview === true) return respond(200, { email_preview: { to: mail.to, subject: mail.subject, text: mail.text, fingerprint, attachment:{filename:attachment.filename,content:attachment.content} }, email_sent: false });
     const key = env("RESEND_API_KEY");
     if (!key) return respond(503, "Email service is unavailable. Nothing was sent; the quotation is unchanged.");
     let published = false;
@@ -95,7 +92,7 @@ export function createHandler({ createClient, env, sendEmail = fetch, now = () =
     }
     const suffix = action === "registration" ? "-" + now().toISOString().slice(0, 10) : "";
     try {
-      const response = await sendEmail("https://api.resend.com/emails", { method: "POST", headers: { "Authorization": "Bearer " + key, "Content-Type": "application/json", "Idempotency-Key": "myegl-" + action + "-" + record.id + "-" + fingerprint + suffix }, body: JSON.stringify({ from: "ERSY GLOBAL Quotations <quotes@send.ersygloballogistics.com>", to: [mail.to], reply_to: "sales@ersygloballogistics.com", subject: mail.subject, text: mail.text, html: mail.html }) });
+      const response = await sendEmail("https://api.resend.com/emails", { method: "POST", headers: { "Authorization": "Bearer " + key, "Content-Type": "application/json", "Idempotency-Key": "myegl-" + action + "-" + record.id + "-" + fingerprint + suffix }, body: JSON.stringify({ from: "ERSY GLOBAL Quotations <quotes@send.ersygloballogistics.com>", to: [mail.to], reply_to: "sales@ersygloballogistics.com", subject: mail.subject, text: mail.text, html: mail.html, attachments: [{filename:attachment.filename,content:attachment.content}] }) });
       const result = await response.json().catch(() => ({}));
       if (!response.ok || !result.id) return respond(200, { message: (published ? "Quotation published, but " : "") + "email was not accepted. Please retry from this preview.", published, email_sent: false });
       let saved = true;

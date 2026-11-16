@@ -1,16 +1,16 @@
 // Administrator-only email actions. Opening a preview never sends mail.
 export function appendAdminEmailAction(container, client, options) {
   const make = (tag, value) => { const e = document.createElement(tag); e.textContent = value || ''; return e; };
-  const registration = options.action === 'registration';
   const root = make('div'); root.className = 'admin-email-action';
   root.style.cssText = 'margin:12px 0;max-width:100%;overflow-wrap:anywhere';
-  const open = make('button', registration ? 'Email registration link' : 'Email quotation and account link');
+  const open = make('button', 'Send quotation');
   open.type = 'button'; open.className = 'secondary';
   const status = make('p'); status.setAttribute('role', 'status');
   const preview = make('div'); preview.hidden = true;
   preview.style.cssText = 'border:1px solid #cbdce4;border-radius:10px;padding:16px;margin-top:12px;background:#f7fbfc';
   root.append(open, status, preview); container.append(root);
-  const payload = { action: registration ? 'registration' : 'quotation' };
+  const payload = { action: 'quotation' };
+  let attachmentUrl;
   if (options.job_id) payload.job_id = options.job_id;
   else if (options.record_type === 'job') payload.job_id = options.record_id;
   else if (options.record_type === 'rfq') payload.rfq_id = options.record_id;
@@ -39,13 +39,19 @@ export function appendAdminEmailAction(container, client, options) {
       const email = data.email_preview;
       preview.replaceChildren(make('h3', 'Email preview'), make('p', 'To: ' + email.to), make('p', 'Subject: ' + email.subject));
       const body = make('div', email.text); body.style.cssText = 'white-space:pre-wrap;line-height:1.55;overflow-wrap:anywhere';
-      const send = make('button', 'Send email to customer'); send.type = 'button';
+      if(!email.attachment?.content)throw new Error('Quotation PDF is missing. Please try again.');
+      if(attachmentUrl)URL.revokeObjectURL(attachmentUrl);
+      const bytes=Uint8Array.from(atob(email.attachment.content),c=>c.charCodeAt(0));
+      attachmentUrl=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+      const attachment=make('p','Attachment: ');
+      const attachmentLink=make('a',email.attachment.filename);attachmentLink.href=attachmentUrl;attachmentLink.target='_blank';attachmentLink.rel='noopener';attachmentLink.style.cssText='color:#006b78;font-weight:600;overflow-wrap:anywhere';attachment.append(attachmentLink);
+      const send = make('button', 'Send quotation email'); send.type = 'button';
       const close = make('button', 'Close preview'); close.type = 'button'; close.className = 'secondary'; close.style.margin = '8px';
       close.onclick = () => { preview.hidden = true; status.textContent = ''; };
-      preview.append(body, make('p', 'Review the recipient and message before sending.'), send, close); preview.hidden = false;
+      preview.append(body, attachment, send, close); preview.hidden = false;
       status.textContent = 'Preview ready. No email has been sent.';
       send.onclick = async () => {
-        if (!confirm('Send this ' + (registration ? 'registration email' : 'quotation email') + ' to ' + email.to + '?')) return;
+        if (!confirm('Send this quotation email and PDF attachment to ' + email.to + '?')) return;
         send.disabled = true; close.disabled = true; open.disabled = true; status.textContent = 'Sending email…';
         try {
           const result = await invoke({ ...payload, expected_hash: email.fingerprint });
