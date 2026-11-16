@@ -1,0 +1,84 @@
+/* MyEGL administrator "control tower" layout. Presentation only: all data logic stays in myegl/index.html. */
+body.egl-admin main{max-width:1280px}
+body.egl-admin #portalHeading{font-size:26px;margin:6px 0 2px}
+body.egl-admin #portalSubtitle{margin:0 0 16px}
+body.egl-admin #adminPanel{background:transparent;border:0;box-shadow:none;padding:0}
+body.egl-admin #adminPanel>h2,body.egl-admin #adminPanel>p.muted,body.egl-admin #adminPanel>p:has(>.admin-workspace-link){display:none}
+/* KPI cards */
+body.egl-admin .admin-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 18px}
+body.egl-admin .admin-stat{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:96px;padding:16px 16px 16px 72px;background:var(--egl-panel,#fff);border:1px solid var(--egl-border,#dbe5eb);border-radius:14px;box-shadow:0 4px 14px #102a4308;transition:border-color .15s,box-shadow .15s,transform .15s}
+body.egl-admin .admin-stat:hover{border-color:#008f91;box-shadow:0 8px 22px #008f9120;transform:translateY(-1px)}
+body.egl-admin .admin-stat strong{font-size:30px;line-height:1.1}
+body.egl-admin .admin-stat span{margin-top:4px;font-size:13px;color:var(--egl-muted,#53687a)}
+body.egl-admin .admin-stat:before{content:"";position:absolute;left:16px;top:50%;width:42px;height:42px;margin-top:-21px;border-radius:12px;background:#e3f6f5 center/22px no-repeat}
+body.egl-admin .admin-stat:nth-child(1):before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007e88' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='9' cy='8' r='3.5'/%3E%3Cpath d='M2.5 20c0-4 3-6 6.500-6s6.500 2 6.500 6M17 4.500a3.500 3.500 0 010 7M21.500 20c0-3-1.500-5-4-5.800'/%3E%3C/svg%3E")}
+body.egl-admin .admin-stat:nth-child(2):before{background-color:#fdf1d6;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23986a0a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
+body.egl-admin .admin-stat:nth-child(3):before{background-color:#e4ecfb;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23284f9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h9l4 4v14H6z'/%3E%3Cpath d='M14 3v5h5M9 13h7M9 17h7'/%3E%3C/svg%3E")}
+body.egl-admin .admin-stat:nth-child(4):before{background-color:#e2f5ea;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23087443' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10'/%3E%3C/svg%3E")}
+body.egl-admin .admin-stat.egl-attention{border-color:#e3a62b;background:linear-gradient(#fffaf0,#fff)}
+body.egl-admin .admin-stat.egl-attention strong{color:#986a0a}
+/* tabs */
+.egl-tabs{display:flex;gap:6px;border-bottom:2px solid var(--egl-border,#dbe5eb);margin:0 0 16px;overflow-x:auto}
+.egl-tab{appearance:none;background:transparent;border:0;border-bottom:3px solid transparent;margin:0 0 -2px;padding:11px 16px;border-radius:0;color:var(--egl-muted,#53687a);font:700 14px system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.egl-tab:hover{color:var(--egl-ink,#102a43)}
+.egl-tab[aria-selected=true]{color:#007e88;border-bottom-color:#008f91}
+.egl-tab .egl-count{display:inline-block;min-width:22px;margin-left:7px;padding:1px 7px;border-radius:20px;background:#e8eff3;color:#29465d;font-size:12px;text-align:center}
+.egl-tab .egl-count.warn{background:#fdf1d6;color:#7a520a}
+.egl-tab-hidden{display:none!important}
+body.egl-admin #adminRfqSection.egl-tab-hidden,body.egl-admin #adminCustomerSection.egl-tab-hidden{display:none!important}
+/* sections are plain cards inside the tabs */
+body.egl-admin #adminRfqSection,body.egl-admin #adminCustomerSection.egl-tab-active{display:block!important;margin:0;border-radius:14px;border:1px solid var(--egl-border,#dbe5eb);background:var(--egl-panel,#fff)}
+body.egl-admin #adminRfqSection>summary,body.egl-admin #adminCustomerSection>summary{display:none}
+body.egl-admin .admin-filters{padding:14px 16px;border-bottom:1px solid var(--egl-border,#dbe5eb);align-items:end}
+/* chips */
+.egl-chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
+.egl-chip{margin:0;padding:6px 13px;border-radius:20px;border:1px solid var(--egl-border,#cbdde3);background:var(--egl-panel,#fff);color:var(--egl-ink,#29465d);font:600 13px system-ui,sans-serif;cursor:pointer}
+.egl-chip[aria-pressed=true]{background:#0b2239;border-color:#0b2239;color:#fff}
+/* request table */
+.egl-thead,body.egl-admin #adminRfqs>details.admin-job-detail>summary.egl-row{display:grid;grid-template-columns:minmax(190px,1.5fr) minmax(120px,1fr) minmax(170px,1.5fr) minmax(130px,1fr) 150px 108px;gap:12px;align-items:center}
+.egl-thead{padding:10px 16px;margin:12px 16px 0;background:#f1f6f8;border-radius:10px 10px 0 0;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#4a6376}
+body.egl-admin #adminRfqs{margin:0 16px 8px}
+body.egl-admin #adminRfqs>details.admin-job-detail{margin:0;border-radius:0;border:1px solid var(--egl-border,#e1e9ee);border-top:0}
+body.egl-admin #adminRfqs>details.admin-job-detail:last-child{border-radius:0 0 10px 10px}
+body.egl-admin #adminRfqs>details.admin-job-detail>summary.egl-row{padding:13px 16px;background:var(--egl-panel,#fff);font-weight:500;font-size:14px;list-style:none}
+body.egl-admin #adminRfqs>details.admin-job-detail>summary.egl-row::-webkit-details-marker{display:none}
+body.egl-admin #adminRfqs>details.admin-job-detail>summary.egl-row:hover{background:#f4fafa}
+body.egl-admin #adminRfqs>details.admin-job-detail[open]>summary.egl-row{background:#eaf8f7;border-bottom:1px solid var(--egl-border,#dbe5eb)}
+.egl-row .egl-ref{font-weight:800;color:#0b2239;overflow-wrap:anywhere}
+.egl-row .egl-sub{display:block;font-size:12px;font-weight:500;color:var(--egl-muted,#53687a);margin-top:2px}
+.egl-row .egl-cell{min-width:0;overflow-wrap:anywhere}
+.egl-row .egl-date{font-size:13px;color:var(--egl-muted,#53687a);text-align:right}
+body.egl-admin #adminRfqs>details.admin-job-detail>.job{padding:18px 20px 20px;background:#fbfdfd;border-top:0}
+body.egl-admin #adminRfqs>details.admin-job-detail>.job>strong{display:none}
+/* status pills */
+.egl-pill{display:inline-block;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:700;text-transform:capitalize;white-space:nowrap;background:#e8eff3;color:#3a5266}
+.egl-pill:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:currentColor;opacity:.75}
+.egl-pill.s-draft{background:#eceff3;color:#4d5d6c}
+.egl-pill.s-pending{background:#fdf1d6;color:#8a5d06}
+.egl-pill.s-approved{background:#dff3e8;color:#0a6a3c}
+.egl-pill.s-revision{background:#ffe9d6;color:#9a4a07}
+.egl-pill.s-declined{background:#fde3e1;color:#a4281d}
+.egl-pill.s-submitted{background:#e3ecfb;color:#2a4f9a}
+.egl-pill.s-archived{background:#e8eaee;color:#5a6672}
+/* registrations table */
+body.egl-admin .admin-customer-table th{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+body.egl-admin .admin-customer-table td button{margin:2px 6px 2px 0}
+body.egl-admin .admin-table-scroll{border:0;border-radius:0;margin:12px 16px}
+body.egl-admin .admin-customer-table{border:1px solid var(--egl-border,#dbe5eb);border-radius:10px}
+.admin-status.approved,.admin-status.pending{display:inline-block;padding:4px 11px;border-radius:20px;font-size:12px}
+.admin-status.pending{background:#fdf1d6;color:#8a5d06}.admin-status.approved{background:#dff3e8;color:#0a6a3c}
+body.egl-admin #adminRfqSection .admin-pages,body.egl-admin #adminCustomerSection .admin-pages{padding:10px 16px 16px}
+.egl-empty{padding:34px 16px;text-align:center;color:var(--egl-muted,#53687a)}
+html[data-egl-theme=dark] .egl-thead{background:#142d40;color:#b5c9d4}
+html[data-egl-theme=dark] .egl-row .egl-ref{color:#ecf5f8}
+html[data-egl-theme=dark] body.egl-admin #adminRfqs>details.admin-job-detail>.job,html[data-egl-theme=dark] body.egl-admin #adminRfqs>details.admin-job-detail[open]>summary.egl-row{background:#142d40}
+@media(max-width:980px){
+ body.egl-admin .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .egl-thead{display:none}
+ body.egl-admin #adminRfqs>details.admin-job-detail>summary.egl-row{grid-template-columns:1fr auto;gap:6px 12px}
+ .egl-row .egl-cell.c-route,.egl-row .egl-cell.c-customer{grid-column:1/-1}
+ .egl-row .egl-date{text-align:left}
+}
+@media(max-width:520px){body.egl-admin .admin-stat{padding:14px 12px 14px 62px}body.egl-admin .admin-stat:before{left:12px}body.egl-admin .admin-stat strong{font-size:25px}}
+
+body.egl-admin #adminRfqSection.egl-tab-hidden,body.egl-admin #adminCustomerSection.egl-tab-hidden,body.egl-admin #adminCustomerSection:not(.egl-tab-active){display:none!important}
