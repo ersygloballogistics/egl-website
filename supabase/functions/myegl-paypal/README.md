@@ -1,13 +1,13 @@
 # MyEGL PayPal checkout
 
-Status: backend deployed, checkout intentionally disabled pending secret storage and real provider validation. A live app named `ERSY GLOBAL MyEGL` exists in the business PayPal account. No customer payment has been made during implementation.
+Status: live PayPal checkout is configured and enabled as of 17 November 2026 (Dubai). The live `ERSY GLOBAL MyEGL` app, OAuth credentials, notification listener and checkout creation have been verified. No customer payment was made during implementation.
 
 ## Configuration
 
 Set these in Supabase Edge Function secrets, never in repository files, browser source, or chat:
 
 - `PAYPAL_MODE=live`
-- `PAYPAL_ENABLED=false` until connection verification and provider testing are complete
+- `PAYPAL_ENABLED=true` in production; set it to `false` to pause new checkout requests
 - `PAYPAL_LIVE_CLIENT_ID` from the live MyEGL app
 - `PAYPAL_LIVE_CLIENT_SECRET` from the same app
 - `PAYPAL_LIVE_WEBHOOK_ID` for the listener below
@@ -29,4 +29,4 @@ An order reservation is reused for up to two hours. Capturing or pending payment
 
 Run `node --test tests/paypal-payment.test.mjs tests/paypal-customer-ui.test.mjs` from the repository root. These use isolated mocks, never real payments. `tests/paypal-database.sql` checks amount conversion, approval, ownership, duplicate reservation/capture, edit locks, partial/full refunds, and RLS inside a rolled-back transaction. Do not remove the rollback.
 
-After secrets are saved, use `/myegl/payments/` while signed in as a MyEGL administrator to check OAuth credentials and readiness without charging anyone. Complete a PayPal sandbox provider test in a separate sandbox fixture workflow before enabling customer checkout. Do not use a customer's real invoice as a sandbox fixture. A real-money validation payment requires the user's separate, explicit transaction authorization.
+Use `/myegl/payments/` while signed in as a MyEGL administrator to check OAuth credentials and readiness without charging anyone. Final readiness returned `ready=true`, `enabled=true`, `mode=live`, with credentials and the exact webhook subscription verified. The production handler was restored after the protected setup checks.\n\nCompleted checks: 20 isolated server/client tests, rolled-back database tests including approval, ownership, invoice locks, idempotency and refunds, and a real PayPal create/read check using an unpaid setup order labelled `EGL-SETUP-CHECK`. That check displayed AED 3.67 as USD 1.00 and verified the approval host and recipient through the checkout handler. No capture was attempted and no test users, jobs, invoices or payment records were saved in the portal. A completed provider sandbox buyer session and a real-money capture were not performed.\n\nFor future payment changes, use a separate PayPal sandbox fixture workflow. Do not use a customer's real invoice as a sandbox fixture. Any real-money validation payment requires separate, explicit transaction authorization.
