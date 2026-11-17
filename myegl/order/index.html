@@ -17,7 +17,7 @@
 </script>
 <script src="/vendor/supabase-js-2.49.4.js"></script><script type="module">
 const {createClient}=window.supabase;
-import {showPaymentMethods,completePayPalReturn} from '/myegl-paypal.js?v=20261117d';
+import {showPaymentMethods,completePayPalReturn} from '/myegl-paypal.js?v=20261117e';
 const db=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true}});
 const $=id=>document.getElementById(id);const el=(tag,value)=>{const x=document.createElement(tag);x.textContent=value??'';return x};
 const fmt=v=>String(v||'Not yet available').replaceAll('_',' ');const money=(v,c)=> (c||'AED')+' '+Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
