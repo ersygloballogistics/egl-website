@@ -110,7 +110,7 @@ export function showPaymentMethods({db,job,user,container,invoiceId,onBusy,showH
   renderBank:panel=>{
    if(job.payment_status==='paid'){panel.append(node('p','This order is paid.'));return}
    const bank=node('dl');bank.className='egl-bank-details';
-   for(const [label,value] of [['Account holder','ESTHER AMINU'],['Bank','Dubai Islamic Bank (DIB)'],['IBAN','AE730240001523243259701'],['Account number','001523243259701'],['Payment reference',job.reference]]){
+   for(const [label,value] of [['Company name','ERSY GLOBAL LOGISTICS'],['Account holder','ESTHER AMINU'],['Bank','Dubai Islamic Bank (DIB)'],['IBAN','AE730240001523243259701'],['Account number','001523243259701'],['Payment reference',job.reference]]){
     bank.append(node('dt',label),node('dd',value||'Please contact ERSY GLOBAL'));
    }
    panel.append(bank,node('p','Please include the payment reference in your transfer description.'));
