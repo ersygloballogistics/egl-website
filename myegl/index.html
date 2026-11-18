@@ -157,10 +157,12 @@ header .egl-portal-title-row .egl-portal-back{width:34px;height:34px;flex:none;f
 <p id="globalMsg" role="status"></p></main>
 <script src="/vendor/supabase-js-2.49.4.js"></script><script type="module">
 const {createClient}=window.supabase;
-import {showAccountPayments} from '/myegl-paypal.js?v=20261117d';
+import {showAccountPayments} from '/myegl-paypal.js?v=20261117e';
 import {appendAdminEmailAction} from '/myegl-admin-email.js?v=20261116b';
+import {initMfa} from '/myegl-mfa.js?v=20261117a';
 const supabase=createClient('https://mycknhzaadlaopqjpnpi.supabase.co','sb_publishable_IX3AQIFMUey57SYCI58_9w_cmSjqGCH',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
+let mfa=null;
 const msg=(id,value,error=false)=>{ $(id).textContent=value;$(id).className=error?'error':'success'; };
 const text=(tag,value)=>{const n=document.createElement(tag);n.textContent=value??'';return n};
 let recoveryMode=false;
@@ -282,7 +284,7 @@ openAdminDeepLink();const target=$('adminJobs');target.replaceChildren();if(jobs
 function toggleAccountMenu(open){$('accountMenu').classList.toggle('hidden',!open);$('accountTrigger').setAttribute('aria-expanded',String(open))}
 $('accountTrigger').onclick=()=>toggleAccountMenu($('accountMenu').classList.contains('hidden'));
 $('menuLogin').onclick=()=>{toggleAccountMenu(false);profileMode=false;forgotMode=false;recoveryMode=false;refresh();$('email').focus()};
-$('menuProfile').onclick=()=>{toggleAccountMenu(false);profileMode=true;refresh()};
+$('menuProfile').onclick=()=>{toggleAccountMenu(false);profileMode=true;refresh().then(()=>mfa&&mfa.renderSetup())};
 const IDLE_KEY='myegl:lastActivity';
 const ADMIN_IDLE_MS=5*60*1000;
 const CUSTOMER_IDLE_MS=15*60*1000;
@@ -309,6 +311,8 @@ if(forgotMode){$('registerPanel').classList.add('hidden');$('adminPanel').classL
 $('resetPanel').classList.add('hidden');
 $('registerPanel').classList.toggle('hidden',!registerMode);if(registerMode){$('auth').classList.add('hidden');$('dashboard').classList.add('hidden');$('adminPanel').classList.add('hidden');$('profilePanel').classList.add('hidden');$('registrationPending').classList.toggle('hidden',!registrationPending);return}
 const {data:{user}}=await supabase.auth.getUser();
+if(!mfa)mfa=initMfa({supabase,onVerified:()=>refresh()});
+if(await mfa.gate(user))return;
 if(user){idleUser=user;const last=idleStamp();if(last&&Date.now()-last>=idleLimit()){idleUser=null;sessionStorage.removeItem(IDLE_KEY);await supabase.auth.signOut();return refresh()}if(!last)sessionStorage.setItem(IDLE_KEY,String(Date.now()))}else{idleUser=null;sessionStorage.removeItem(IDLE_KEY)}
 activeUser=user;
 $('menuEmail').textContent=user?.email||'Not signed in';$('menuProfile').classList.toggle('hidden',!user);$('menuLogout').classList.toggle('hidden',!user);$('menuLogin').classList.toggle('hidden',!!user);
