@@ -65,7 +65,7 @@
   if(!b){b=make('div','egl-attention');b.id='eglAttention';area.insertBefore(b,area.firstChild)}
   b.replaceChildren();const t=make('div');t.append(make('strong','',cards.length===1?'1 quotation is waiting for your approval':cards.length+' quotations are waiting for your approval'),make('span','','Please review it and choose Accept, Decline or Request revision.'));
   const btn=make('button','','Review now');btn.type='button';btn.onclick=()=>cards[0].scrollIntoView({behavior:'smooth',block:'start'});b.append(t,btn)}
- function emptyNote(){const only=rfqBox.children.length===1&&rfqBox.firstElementChild.tagName==='P';rfqBox.hidden=only&&!!jobsBox.querySelector('.job')}
+ function emptyNote(){const only=rfqBox.children.length===1&&rfqBox.firstElementChild.tagName==='P';rfqBox.hidden=only&&!!jobsBox.querySelector('.job,.egl-empty')}
  function help(){if(document.getElementById('eglHelp'))return;const a=make('a','egl-help','Need help? WhatsApp us');a.id='eglHelp';a.href='https://wa.me/971556581004?text='+encodeURIComponent('Hello ERSY GLOBAL, I need help with my MyEGL account.');a.target='_blank';a.rel='noopener noreferrer';document.body.append(a)}
  function run(){help();document.body.classList.toggle('egl-customer',!area.classList.contains('hidden'));
   for(const c of jobsBox.querySelectorAll(':scope>.job'))enhanceJob(c);
