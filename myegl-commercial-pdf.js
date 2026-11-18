@@ -10,7 +10,7 @@ const BANK = {
  account: '001523243259701'
 };
 const COMPANY = {
- address: 'Al Barsha Heights, Dubai Internet City, Dubai, United Arab Emirates',
+ address: 'CWS-1V-1000834, 26th Floor, Amber Gem Tower, Ajman, United Arab Emirates',
  contact: 'sales@ersygloballogistics.com   |   +971 55 658 1004   |   www.ersygloballogistics.com'
 };
 
