@@ -29,6 +29,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  const pdf=new jsPDF({unit:'mm',format:'a4'});
  const NAVY=[11,34,57],TEAL=[0,166,166],TEALDK=[0,126,136],MUTED=[91,111,127],LINE=[220,230,236],SOFT=[243,248,250],WHITE=[255,255,255];
  const isQuote=kind==='quotation';
+ const isPaid=!isQuote&&(record.status==='paid'||(Number(record.total)>0&&Number(record.amount_paid||0)>=Number(record.total)));
  const currency=record.currency||job.currency||'AED';
  const total=Number(isQuote?job.quoted_total:record.total)||0;
  const money=v=>Number(v||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -50,11 +51,11 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   if(first){
    fill(NAVY);pdf.rect(0,0,210,3,'F');fill(TEAL);pdf.rect(0,0,67,3,'F');
    if(logo){const lh=22,lw=lh*logo.w/logo.h;pdf.addImage(logo.data,'PNG',L,9,lw,lh)}else txt('ERSY GLOBAL',L,22,20,true,NAVY);
-   txt(isQuote?'QUOTATION':'INVOICE',R,24,27,true,NAVY,{align:'right'});
-   txt(isQuote?'Prepared for your logistics request':'Request for payment',R,31,8.5,false,MUTED,{align:'right'});
+   txt(isQuote?'QUOTATION':isPaid?'PAID INVOICE':'INVOICE',R,24,27,true,NAVY,{align:'right'});
+   txt(isQuote?'Prepared for your logistics request':isPaid?'Payment received. Thank you.':'Request for payment',R,31,8.5,false,MUTED,{align:'right'});
   }else{
    fill(NAVY);pdf.rect(0,0,210,3,'F');fill(TEAL);pdf.rect(0,0,67,3,'F');
-   txt('ERSY GLOBAL LOGISTICS',L,12,8,true,NAVY);txt((isQuote?'Quotation ':'Invoice ')+number,R,12,8,false,MUTED,{align:'right'});
+   txt('ERSY GLOBAL LOGISTICS',L,12,8,true,NAVY);txt((isQuote?'Quotation ':isPaid?'Paid invoice ':'Invoice ')+number,R,12,8,false,MUTED,{align:'right'});
    stroke(LINE);pdf.line(L,15,R,15);
   }
  };
@@ -144,7 +145,13 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   ensure(40);
   txt('Subtotal',tx,y,9,false,MUTED);txt(money(subtotal),R-5,y,9,false,NAVY,{align:'right'});y+=6;
   txt('Amount paid',tx,y,9,false,MUTED);txt(money(paid),R-5,y,9,false,NAVY,{align:'right'});y+=5;
-  fill(TEAL);pdf.roundedRect(tx-4,y,84,12,2,2,'F');txt('BALANCE DUE',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(balance),R-4,y+8,13,true,WHITE,{align:'right'});y+=12+10;
+  fill(isPaid?[21,128,61]:TEAL);pdf.roundedRect(tx-4,y,84,12,2,2,'F');if(isPaid){txt('PAID IN FULL',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(paid),R-4,y+8,13,true,WHITE,{align:'right'})}else{txt('BALANCE DUE',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(balance),R-4,y+8,13,true,WHITE,{align:'right'})}y+=12+10;
+  if(isPaid){
+   ensure(30);fill([236,248,240]);stroke([170,215,185]);pdf.roundedRect(L,y,W,22,2.5,2.5,'FD');
+   txt('Payment received. This invoice is paid in full.',L+5,y+8,10,true,[21,100,55]);
+   txt('Thank you for your payment. Please keep this document as your receipt for '+number+'.',L+5,y+14,8.2,false,[21,100,55]);
+   txt('Questions? Contact sales@ersygloballogistics.com.',L+5,y+18.5,8.2,false,[21,100,55]);y+=22+6;
+  }else{
   sectionTitle('How to pay');
   ensure(40);
   const pw=(W-8)/3,bh=34;
@@ -159,6 +166,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   txt('Please quote  '+number+'  as your payment reference.',L+5,y+5.5,8.6,true,[107,74,0]);
   txt((record.due_date?'Payment is due by '+date(record.due_date)+'. ':'Please refer to the agreed payment terms. ')+'Questions? Contact sales@ersygloballogistics.com.',L+5,y+10,7.6,false,[107,74,0]);
   y+=13+6;
+  }
  }
 
  const pages=pdf.getNumberOfPages();
@@ -168,5 +176,5 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   txt('Page '+n+' of '+pages,R,292,6.8,false,MUTED,{align:'right'});
  }
  if(mode==='preview')return pdf.output('bloburl');
- pdf.save('ERSY-GLOBAL-'+(isQuote?'Quotation-':'Invoice-')+String(number).replace(/[^a-zA-Z0-9-]/g,'')+'.pdf');
+ pdf.save('ERSY-GLOBAL-'+(isQuote?'Quotation-':isPaid?'Paid-Invoice-':'Invoice-')+String(number).replace(/[^a-zA-Z0-9-]/g,'')+'.pdf');
 }
