@@ -149,7 +149,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   if(isPaid){
    ensure(30);fill([236,248,240]);stroke([170,215,185]);pdf.roundedRect(L,y,W,22,2.5,2.5,'FD');
    txt('Payment received. This invoice is paid in full.',L+5,y+8,10,true,[21,100,55]);
-   txt('Thank you for your payment. Please keep this document as your receipt for '+number+'.',L+5,y+14,8.2,false,[21,100,55]);
+   {const MET={bank_transfer:'Bank transfer',card:'Card payment',paypal:'PayPal',cash:'Cash',other:'Other'};const parts=[];if(record.paid_at)parts.push('Received on '+date(record.paid_at));if(MET[record.payment_method])parts.push('by '+MET[record.payment_method]);const detail=(parts.join(' ')+(record.payment_reference?'. Reference: '+record.payment_reference:'')).trim();txt(detail?detail+'. Keep this document as your receipt for '+number+'.':'Thank you for your payment. Please keep this document as your receipt for '+number+'.',L+5,y+14,8.2,false,[21,100,55])}
    txt('Questions? Contact sales@ersygloballogistics.com.',L+5,y+18.5,8.2,false,[21,100,55]);y+=22+6;
   }else{
   sectionTitle('How to pay');
