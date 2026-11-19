@@ -19,7 +19,7 @@ async function loadLogo(){
   const img=new Image();
   img.onload=()=>{try{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);resolve({data:c.toDataURL('image/png'),w:img.naturalWidth,h:img.naturalHeight})}catch{resolve(null)}};
   img.onerror=()=>resolve(null);
-  img.src='/egl-logo-pdf.png';
+  img.src='/egl-logo-pdf.png?v=20261119b';
  });
 }
 
@@ -50,7 +50,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  const pageTop=first=>{
   if(first){
    fill(NAVY);pdf.rect(0,0,210,3,'F');fill(TEAL);pdf.rect(0,0,67,3,'F');
-   if(logo){const lh=22,lw=lh*logo.w/logo.h;pdf.addImage(logo.data,'PNG',L,9,lw,lh)}else txt('ERSY GLOBAL',L,22,20,true,NAVY);
+   if(logo){const lh=29,lw=lh*logo.w/logo.h;pdf.addImage(logo.data,'PNG',L,7,lw,lh)}else txt('ERSY GLOBAL',L,22,20,true,NAVY);
    txt(isQuote?'QUOTATION':isPaid?'PAID INVOICE':'INVOICE',R,24,27,true,NAVY,{align:'right'});
    txt(isQuote?'Prepared for your logistics request':isPaid?'Payment received. Thank you.':'Request for payment',R,31,8.5,false,MUTED,{align:'right'});
   }else{
