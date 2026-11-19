@@ -78,3 +78,4 @@ a.egl-empty-link{color:#007e88;font-weight:600}
 body.egl-customer .egl-help{display:inline-flex}
 .egl-help:before{content:"";width:9px;height:9px;border-radius:50%;background:#2fd37a}
 @media(max-width:560px){.egl-help{right:12px;bottom:12px;padding:11px 15px;font-size:14px}}
+.egl-fact a.egl-track{color:#007e88;font-weight:700;text-decoration:underline;word-break:break-all}

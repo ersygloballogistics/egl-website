@@ -34,10 +34,10 @@
   if(svc)left.append(make('div','egl-service',nice(svc[1])));
   const pill=make('span','egl-pill '+cls,label);head.append(left,pill);
   const facts=make('div','egl-facts');
-  const fact=(k,v)=>{const d=make('div','egl-fact');d.append(make('small','',k),make('b','',v));facts.append(d)};
+  const fact=(k,v)=>{const d=make('div','egl-fact');const b=make('b','');if(v&&v.nodeType)b.append(v);else b.textContent=v;d.append(make('small','',k),b);facts.append(d)};
   if(svc){const o=svc[2]&&svc[2]!=='—'?svc[2]:'Origin to be confirmed',d=svc[3]&&svc[3]!=='—'?svc[3]:'Destination to be confirmed';fact('Route',o+' → '+d)}
   if(total)fact('Quotation',total[1]==='Not issued'?'Not issued yet':total[1]);
-  fact('Shipment',(shipLabel[ship]||nice(ship))+(sh&&sh[2]?' · Tracking '+sh[2]:''));
+  {const shipText=(shipLabel[ship]||nice(ship));if(sh&&sh[2]&&card.dataset.trackUrl){const wrap=document.createElement('span');wrap.append(shipText+' · Tracking ');const a=make('a','egl-track',sh[2].trim()+' ↗');a.href=card.dataset.trackUrl;a.target='_blank';a.rel='noopener noreferrer';a.title='Track with '+(card.dataset.trackCarrier||'the carrier');wrap.append(a);fact('Shipment',wrap)}else fact('Shipment',shipText+(sh&&sh[2]?' · Tracking '+sh[2]:''))}
   if(pay&&pay!=='not_requested')fact('Payment',nice(pay));
   const body=make('div','egl-card-body');
   const keep=[...card.childNodes].filter(n=>!(n.nodeType===1&&(n.tagName==='H3'||n.dataset.eglUsed)));
