@@ -103,15 +103,14 @@
     .brand-symbol {
       display: block;
       width: 164px;
-      height: 50px;
+      height: 45px;
       overflow: hidden;
     }
 
     .brand-symbol img {
       display: block;
-      width: auto;
-      height: 100%;
-      margin: 0 auto;
+      width: 164px;
+      height: auto;
     }
 
     .brand-wordmark {
@@ -418,8 +417,8 @@
       header > .container { width: 90%; }
       nav { gap: 12px; }
       .brand { width: 144px; }
-      .brand-symbol { width: 144px; height: 42px; }
-      .brand-symbol img { width: auto; }
+      .brand-symbol { width: 144px; height: 39px; }
+      .brand-symbol img { width: 144px; }
       .brand-wordmark { font-size: 12px; }
       .nav-links { gap: 10px; }
       .nav-links a:not(.quote-btn) {
@@ -523,8 +522,8 @@ html[data-egl-theme="dark"] .password-toggle{color:var(--egl-ink)}
 .egl-tools .egl-menu-button{display:none}
 .nav-links{margin-left:auto;gap:clamp(12px,2vw,28px)}
 @media(max-width:850px){.egl-tools{margin-left:auto}.egl-tools .egl-menu-button{display:inline-flex}.nav-links{display:none!important}nav{gap:8px}.egl-drawer{width:min(340px,90vw)}.egl-drawer a{min-height:48px;display:flex;align-items:center}}
-@media(min-width:851px) and (max-width:1050px){.nav-links a{font-size:13px}.brand{width:145px}.brand-symbol{width:145px;height:44px}.brand-symbol img{width:auto}}
-@media(max-width:380px){.brand{width:125px}.brand-symbol{width:125px;height:38px}.brand-symbol img{width:auto}.brand-wordmark{font-size:11px}.egl-tools .egl-icon-button{width:40px;height:40px;min-width:40px}}
+@media(min-width:851px) and (max-width:1050px){.nav-links a{font-size:13px}.brand{width:145px}.brand-symbol,.brand-symbol img{width:145px}.brand-symbol{height:40px}}
+@media(max-width:380px){.brand{width:125px}.brand-symbol,.brand-symbol img{width:125px}.brand-symbol{height:35px}.brand-wordmark{font-size:11px}.egl-tools .egl-icon-button{width:40px;height:40px;min-width:40px}}
 
 /* Dedicated homepage contact section; responsive, open layout */
 .egl-contact-section{padding:clamp(64px,8vw,104px) 0;background:var(--egl-bg);scroll-margin-top:100px}
@@ -689,7 +688,7 @@ header nav{min-height:88px;gap:24px}
 <header>
   <div class="container">
     <nav>
-      <a class="brand" href="#top" aria-label="ERSY GLOBAL homepage"><span class="brand-symbol"><img src="/egl-emblem.webp" srcset="/egl-emblem.webp 1x, /egl-emblem-2x.webp 2x" alt="" aria-hidden="true"></span><span class="brand-wordmark">ERSY GLOBAL</span></a>
+      <a class="brand" href="#top" aria-label="ERSY GLOBAL homepage"><span class="brand-symbol"><img src="/egl-logo.webp" alt="" aria-hidden="true"></span><span class="brand-wordmark">ERSY GLOBAL</span></a>
 
       <div class="nav-links" aria-label="Main navigation"><a href="#top">Home</a><a href="/services/">Services</a><a href="#about">About Us</a><a href="#contact">Contact Us</a><a href="/myegl/" title="Sign in to your MyEGL customer portal">MyEGL Portal</a></div>
     </nav>
