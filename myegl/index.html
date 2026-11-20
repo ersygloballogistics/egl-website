@@ -330,6 +330,7 @@ $('adminPanel').classList.add('hidden');
 const {data:profile,error:e}=await supabase.from('portal_customers').select('approved,email').eq('id',user.id).maybeSingle();
 if(e){msg('profileMsg','Unable to load account status: '+e.message,true);return}
 if(!profile){msg('profileMsg','Your account is being prepared. Contact ERSY GLOBAL if this persists.',true);return}
+supabase.functions.invoke('myegl-notify-signup').catch(()=>{});
 if(!profile.approved){$('rfqArea').classList.add('hidden');msg('profileMsg','Account registered. Awaiting ERSY GLOBAL approval before your quotations become visible.');$('jobs').replaceChildren();return}
 msg('profileMsg','Account approved. Welcome, '+profile.email+'.');$('rfqArea').classList.remove('hidden');await loadMyRfqs(user.id);
 const {data:customerInvoices,error:customerInvoiceError}=await supabase.from('myegl_invoices').select('id,job_id,invoice_number,status,total,currency,amount_paid,due_date,paid_at,payment_method,payment_reference').eq('customer_id',user.id).in('status',['issued','partially_paid','paid']);const customerInvoiceByJob=new Map();for(const i of (customerInvoices||[])){const prev=customerInvoiceByJob.get(i.job_id);const open=Number(i.total)>Number(i.amount_paid||0);if(!prev||(open&&!(Number(prev.total)>Number(prev.amount_paid||0))))customerInvoiceByJob.set(i.job_id,i)}if(customerInvoiceError)msg('globalMsg','Unable to load invoices: '+customerInvoiceError.message,true);
