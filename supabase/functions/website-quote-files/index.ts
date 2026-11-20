@@ -79,9 +79,9 @@ Deno.serve(async req => {
     if (!kind) { rejected.push(f.name.slice(0, 80)); continue; }
     const path = jobId + "/" + crypto.randomUUID() + "-" + safeName(f.name, kind.ext);
     const up = await admin.storage.from("rfq-files").upload(path, bytes, { contentType: kind.mime, upsert: false });
-    if (up.error) { rejected.push(f.name.slice(0, 80)); continue; }
+    if (up.error) { console.error("Storage upload failed", up.error.message); return reply(502, "The file could not be stored. Please try again."); }
     const row = await admin.from("myegl_job_files").insert({ job_id: jobId, storage_path: path, file_name: safeName(f.name, kind.ext), mime_type: kind.mime, size_bytes: bytes.length });
-    if (row.error) { await admin.storage.from("rfq-files").remove([path]); rejected.push(f.name.slice(0, 80)); continue; }
+    if (row.error) { console.error("File record failed", row.error.message); await admin.storage.from("rfq-files").remove([path]); return reply(502, "The file could not be saved. Please try again."); }
     saved.push({ name: safeName(f.name, kind.ext), size: bytes.length });
   }
   if (!saved.length) return reply(400, { error: "None of the files could be accepted. Please use PDF, image, Word, Excel, CSV or text files.", rejected });
