@@ -202,7 +202,7 @@ async function loadAdminRfqs(){
   const status=(r.quote_status||r.request_status||'submitted').replaceAll('_',' ');
   card.append(text('summary',r.reference+' · '+r.service_type+' · '+status));
   const box=text('div','');box.className='job';
-  box.append(text('strong',r.reference),text('p',r.customer_email||'Customer'),text('p',(r.origin||'Origin not provided')+' → '+(r.destination||'Destination not provided')),text('p','Status: '+status+' · Submitted: '+new Date(r.created_at).toLocaleString()+(r.archived_at?' · Archived':'')+(r.closed_at?' · Closed shipment':'')));
+  box.append(text('strong',r.reference),text('p',r.customer_email||'Customer'),text('p',(()=>{const o=r.origin,d=r.destination;if(/warehous/i.test(r.service_type||''))return d?'Warehouse: '+d:'Storage request';if(o&&d)return o+' → '+d;if(d)return 'Deliver to '+d;if(o)return 'From '+o;return 'No route needed'})()),text('p','Status: '+status+' · Submitted: '+new Date(r.created_at).toLocaleString()+(r.archived_at?' · Archived':'')+(r.closed_at?' · Closed shipment':'')));
   if(r.order_reference&&r.order_reference!==r.reference)box.append(text('p','Quotation / order: '+r.order_reference));
   appendRequestAccountAccess(box,r,loadAdmin);
   const open=text('a','Open request');open.className='button';open.href='/myegl/customers/?type='+r.record_type+'&order='+encodeURIComponent(r.record_id);box.append(open);card.append(box);target.append(card);
@@ -231,7 +231,7 @@ const table=kind==='rfq'?'myegl_rfqs':'portal_jobs';const {data:r,error}=await s
 body.append(text('h3',(kind==='rfq'?'Request for Quote':'Order details')+' · '+(r.reference||'Unreferenced')));
 const grid=document.createElement('div');grid.className='admin-record-grid';body.append(grid);
 const field=(label,value)=>{const d=document.createElement('div');d.className='admin-record-field';d.append(text('small',label),text('strong',value==null||value===''?'Not provided':String(value)));grid.append(d)};
-field('Service',r.service_type);field('Origin',r.origin);field('Destination',r.destination);field('Customer',r.customer_email||r.customer_id);field('Submitted',r.created_at?new Date(r.created_at).toLocaleString():'—');
+field('Service',r.service_type);{const wh=/warehous/i.test(r.service_type||''),need=/freight|shop/i.test(r.service_type||'');if(wh)field('Warehouse location',r.destination);else{if(r.origin||need)field('Origin',r.origin);if(r.destination||need)field('Destination',r.destination)}}field('Customer',r.customer_email||r.customer_id);field('Submitted',r.created_at?new Date(r.created_at).toLocaleString():'—');
 const req=document.createElement('details');req.open=true;req.append(text('summary','Customer requirements'));const detail=text('pre',typeof r.request_details==='object'?JSON.stringify(r.request_details,null,2):r.request_details||r.details||'No additional details');detail.className='admin-record-request';req.append(detail);body.append(req);
 const form=document.createElement('div');form.className='admin-record-editor';body.append(form);
 const dropdown=(label,value,values)=>{const l=document.createElement('label');l.append(text('span',label));const el=document.createElement('select');for(const v of [...new Set([...values,...(value?[value]:[])])]){const o=document.createElement('option');o.value=v;o.textContent=v.replaceAll('_',' ');el.append(o)}el.value=value||values[0];l.append(el);form.append(l);return el};

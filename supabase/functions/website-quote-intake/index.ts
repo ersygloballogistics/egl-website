@@ -39,7 +39,9 @@ Deno.serve(async req=>{
   if(!limit.ok)return json(503,{error:"Please try again later"},origin);
   if(await limit.json()!==true)return json(429,{error:"Too many requests. Please try again later."},origin);
   const uuid=crypto.randomUUID(),reference="EGL-"+uuid.slice(0,12).toUpperCase();
-  const record={zoho_record_id:"WEB-"+uuid,reference,customer_email:email,service_type:service,origin:clean.origin||null,destination:clean.destination||null,request_details:{contact_name:field("firstName",40)+" "+field("lastName",80),company:field("company",200),phone:field("phone",30),source:"ERSY GLOBAL website",...clean}};
+  // Each service stores only the place details it actually asks for.
+ const route=service==="warehousing"?{origin:null,destination:clean.location||null}:{origin:clean.origin||clean.sourceCountry||clean.storeCountry||null,destination:clean.destination||null};
+ const record={zoho_record_id:"WEB-"+uuid,reference,customer_email:email,service_type:service,origin:route.origin,destination:route.destination,request_details:{contact_name:field("firstName",40)+" "+field("lastName",80),company:field("company",200),phone:field("phone",30),source:"ERSY GLOBAL website",...clean}};
   const result=await fetch(url+"/rest/v1/portal_jobs",{method:"POST",headers:{...headers,"Prefer":"return=representation"},body:JSON.stringify(record)});
   if(!result.ok){console.error("Website intake insert failed",result.status);return json(502,{error:"Unable to submit your request. Please try again."},origin);}
   const saved=await result.json().catch(()=>null);
@@ -50,7 +52,7 @@ Deno.serve(async req=>{
   if(resendKey){
    try{
     const lines=Object.entries(clean).map(([k,v])=>k+": "+v).join("\n");
-    const message=["New ERSY GLOBAL quotation request","Reference: "+reference,"Service: "+service,"Customer: "+record.request_details.contact_name,"Email: "+email,"Phone: "+record.request_details.phone,"Company: "+record.request_details.company,"Origin: "+(record.origin||""),"Destination: "+(record.destination||""),"","Request details:",lines].join("\n");
+    const message=["New ERSY GLOBAL quotation request","Reference: "+reference,"Service: "+service,"Customer: "+record.request_details.contact_name,"Email: "+email,"Phone: "+record.request_details.phone,"Company: "+record.request_details.company,...(service==="warehousing"?(record.destination?["Warehouse location: "+record.destination]:[]):[...(record.origin?["Origin: "+record.origin]:[]),...(record.destination?["Destination: "+record.destination]:[])]),"","Request details:",lines].join("\n");
     const sent=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+resendKey,"Content-Type":"application/json"},body:JSON.stringify({from:"ERSY GLOBAL Quotes <quotes@send.ersygloballogistics.com>",to:["sales@ersygloballogistics.com"],reply_to:email,subject:"New RFQ "+reference+" — "+service,text:message})});
     if(!sent.ok)console.error("Quotation notification failed",sent.status);
    }catch(_err){console.error("Quotation notification request failed");}

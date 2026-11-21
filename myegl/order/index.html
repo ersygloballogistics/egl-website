@@ -30,7 +30,7 @@ const {data:profile}=await db.from('portal_customers').select('approved').eq('id
 await completePayPalReturn({db,container:$('message').parentElement});
 const table=kind==='rfq'?'myegl_rfqs':'portal_jobs';const {data:r,error}=await db.from(table).select('*').eq('id',id).eq('customer_id',user.id).maybeSingle();if(error||!r){$('message').textContent='This record is unavailable or does not belong to your account.';return}
 $('title').textContent=r.reference||'My order';$('message').textContent=kind==='rfq'?'Request for Quote · '+fmt(r.status):'Quotation and shipment · '+fmt(r.quote_status);$('content').classList.remove('hidden');
-field('Service',r.service_type);field('Origin',r.origin);field('Destination',r.destination);field('Submitted',r.created_at?new Date(r.created_at).toLocaleDateString():null);
+field('Service',r.service_type);{const wh=/warehous/i.test(r.service_type||''),need=/freight|shop/i.test(r.service_type||'');if(wh)field('Warehouse location',r.destination);else{if(r.origin||need)field('Origin',r.origin);if(r.destination||need)field('Destination',r.destination)}}field('Submitted',r.created_at?new Date(r.created_at).toLocaleDateString():null);
 
 let job=kind==='job'?r:null;
 if(kind==='rfq'){field('RFQ status',fmt(r.status));const {data:matches}=await db.from('portal_jobs').select('*').eq('customer_id',user.id).eq('linked_rfq_id',r.id).limit(1);if(matches?.length){job=matches[0];$('message').textContent='Request for Quote · '+fmt(r.status)+' · Linked quotation '+fmt(job.quote_status)}else $('content').append(el('p','A quotation has not been linked to this request yet. Contact ERSY GLOBAL with your RFQ reference if you have received one.'))}
