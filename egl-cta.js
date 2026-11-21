@@ -8,7 +8,7 @@
   const style = document.createElement('style');
   style.textContent = `
     .egl-wa-btn{background:#0e7a6b;color:#fff}
-    .cta a.btn.egl-wa-btn{background:#0e7a6b!important}
+    .cta a.btn.egl-wa-btn{background:#128c7e!important;color:#fff!important}
     .egl-cta-row{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
     .egl-wa-float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
       z-index:900;background:#0e7a6b;color:#fff;padding:12px 18px;border-radius:999px;
