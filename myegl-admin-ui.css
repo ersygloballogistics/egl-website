@@ -5,7 +5,7 @@ body.egl-admin #portalSubtitle{margin:0 0 16px}
 body.egl-admin #adminPanel{background:transparent;border:0;box-shadow:none;padding:0}
 body.egl-admin #adminPanel>h2,body.egl-admin #adminPanel>p.muted,body.egl-admin #adminPanel>p:has(>.admin-workspace-link){display:none}
 /* KPI cards */
-body.egl-admin .admin-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 18px}
+body.egl-admin .admin-stats{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:0 0 18px}
 body.egl-admin .admin-stat{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:96px;padding:16px 16px 16px 72px;background:var(--egl-panel,#fff);border:1px solid var(--egl-border,#dbe5eb);border-radius:14px;box-shadow:0 4px 14px #102a4308;transition:border-color .15s,box-shadow .15s,transform .15s}
 body.egl-admin .admin-stat:hover{border-color:#008f91;box-shadow:0 8px 22px #008f9120;transform:translateY(-1px)}
 body.egl-admin .admin-stat strong{font-size:30px;line-height:1.1}
@@ -15,6 +15,7 @@ body.egl-admin .admin-stat:nth-child(1):before{background-image:url("data:image/
 body.egl-admin .admin-stat:nth-child(2):before{background-color:#fdf1d6;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23986a0a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
 body.egl-admin .admin-stat:nth-child(3):before{background-color:#e4ecfb;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23284f9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h9l4 4v14H6z'/%3E%3Cpath d='M14 3v5h5M9 13h7M9 17h7'/%3E%3C/svg%3E")}
 body.egl-admin .admin-stat:nth-child(4):before{background-color:#e2f5ea;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23087443' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10'/%3E%3C/svg%3E")}
+body.egl-admin .admin-stat:nth-child(5):before{background-color:#e8eaf3;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334e68' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.5l2.8 2.8L16 9.6'/%3E%3C/svg%3E")}
 body.egl-admin .admin-stat.egl-attention{border-color:#e3a62b;background:linear-gradient(#fffaf0,#fff)}
 body.egl-admin .admin-stat.egl-attention strong{color:#986a0a}
 /* tabs */
@@ -82,3 +83,4 @@ html[data-egl-theme=dark] body.egl-admin #adminRfqs>details.admin-job-detail>.jo
 @media(max-width:520px){body.egl-admin .admin-stat{padding:14px 12px 14px 62px}body.egl-admin .admin-stat:before{left:12px}body.egl-admin .admin-stat strong{font-size:25px}}
 
 body.egl-admin #adminRfqSection.egl-tab-hidden,body.egl-admin #adminCustomerSection.egl-tab-hidden,body.egl-admin #adminCustomerSection:not(.egl-tab-active){display:none!important}
+.egl-empty[hidden]{display:none!important}
