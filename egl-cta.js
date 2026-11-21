@@ -37,14 +37,8 @@
   if (cta) {
     const row = document.createElement('div');
     row.className = 'egl-cta-row';
-    row.append(
-      link('/services/', 'btn', 'Request a Quote'),
-      link(wa, 'btn egl-wa-btn', 'Chat on WhatsApp', true)
-    );
+    row.append(link('/services/', 'btn', 'Request a Quote'));
     cta.append(row);
   }
 
-  const float = link(wa, 'egl-wa-float', 'WhatsApp', true);
-  float.setAttribute('aria-label', 'Chat with ERSY GLOBAL on WhatsApp');
-  document.body.append(float);
 })();
