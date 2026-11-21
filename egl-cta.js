@@ -15,7 +15,7 @@
       font:700 14px Arial,Helvetica,sans-serif;text-decoration:none;
       box-shadow:0 8px 24px rgba(0,0,0,.25)}
     .egl-wa-float:hover{background:#0b5f53}
-    .egl-wa-float:focus-visible{outline:3px solid #26c7c7;outline-offset:3px}
+    .egl-wa-float:focus-visible{outline:3px solid #e0b35a;outline-offset:3px}
   `;
   document.head.append(style);
 

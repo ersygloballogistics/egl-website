@@ -44,7 +44,7 @@ export function appendAdminEmailAction(container, client, options) {
       const bytes=Uint8Array.from(atob(email.attachment.content),c=>c.charCodeAt(0));
       attachmentUrl=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
       const attachment=make('p','Attachment: ');
-      const attachmentLink=make('a',email.attachment.filename);attachmentLink.href=attachmentUrl;attachmentLink.target='_blank';attachmentLink.rel='noopener';attachmentLink.style.cssText='color:#006b78;font-weight:600;overflow-wrap:anywhere';attachment.append(attachmentLink);
+      const attachmentLink=make('a',email.attachment.filename);attachmentLink.href=attachmentUrl;attachmentLink.target='_blank';attachmentLink.rel='noopener';attachmentLink.style.cssText='color:#8a6212;font-weight:600;overflow-wrap:anywhere';attachment.append(attachmentLink);
       const send = make('button', 'Send quotation email'); send.type = 'button';
       const close = make('button', 'Close preview'); close.type = 'button'; close.className = 'secondary'; close.style.margin = '8px';
       close.onclick = () => { preview.hidden = true; status.textContent = ''; };

@@ -1,7 +1,7 @@
 /* MyEGL order page: same look as the customer dashboard. Presentation only. */
-:root{--egl-navy:#0b2239;--egl-teal:#008f91;--egl-line:#dce6ec}
+:root{--egl-navy:#0b2239;--egl-teal:#c4912a;--egl-line:#dce6ec}
 body{background:#f3f8fa}
-header{background:var(--egl-navy);border-top:4px solid #00a6a6;padding:16px max(18px,calc((100% - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+header{background:var(--egl-navy);border-top:4px solid #c4912a;padding:16px max(18px,calc((100% - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
 header strong{font-size:17px;letter-spacing:.2px}
 header a{float:none!important;background:#ffffff1a;border-radius:999px;padding:8px 16px;text-decoration:none;font-weight:600;font-size:14px}
 header a:hover{background:#ffffff33}
@@ -11,20 +11,20 @@ main>.panel:first-child{order:-3}
 #content{order:-1}
 .panel{border-radius:18px;border:1px solid var(--egl-line);box-shadow:0 8px 26px #0b223908;padding:26px}
 main>.panel:first-child h1{margin:6px 0 4px;color:var(--egl-navy);font-weight:800;letter-spacing:-.5px}
-main>.panel:first-child p:first-child a{color:#007e88;font-weight:600;text-decoration:none}
-#message{display:inline-block;background:#e6f6f6;color:#006b72;font-weight:600;border-radius:999px;padding:6px 14px;margin:6px 0 0}
+main>.panel:first-child p:first-child a{color:#8a6212;font-weight:600;text-decoration:none}
+#message{display:inline-block;background:#fbf4e1;color:#8a6212;font-weight:600;border-radius:999px;padding:6px 14px;margin:6px 0 0}
 .panel h2{color:var(--egl-navy);font-weight:800;margin-top:0}
-.panel h2:before{content:"";display:inline-block;width:6px;height:18px;border-radius:3px;background:#00a6a6;margin-right:10px;vertical-align:-2px}
+.panel h2:before{content:"";display:inline-block;width:6px;height:18px;border-radius:3px;background:#c4912a;margin-right:10px;vertical-align:-2px}
 .field{background:#f8fbfc;border-radius:12px;border-color:#e1e9ee}
 .field small{text-transform:uppercase;letter-spacing:.6px;font-size:11px;font-weight:700}
 button,.button{border-radius:10px;font-weight:700;padding:12px 20px;background:var(--egl-teal)}
-button:hover{background:#007e88}
+button:hover{background:#8a6212}
 button.secondary{background:#fff;color:#0b2239;border:2px solid #cbdce2}
 button.secondary:hover{background:#f3f8fa}
 details{border:1px solid #e1e9ee;border-radius:12px;padding:10px 14px;background:#fbfdfd}
 details>summary{font-weight:700;cursor:pointer;color:var(--egl-navy)}
-#payments{border-color:#b9e3e3;box-shadow:0 10px 30px #008f9114}
-.timeline li.current .step-dot{box-shadow:0 0 0 5px #00a6a62b}
+#payments{border-color:#ecd9a8;box-shadow:0 10px 30px #c4912a14}
+.timeline li.current .step-dot{box-shadow:0 0 0 5px #c4912a2b}
 .egl-help{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:8px;background:#0b2239;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;border-radius:999px;box-shadow:0 8px 22px #0b223940}
 .egl-help:before{content:"";width:9px;height:9px;border-radius:50%;background:#2fd37a}
 @media(max-width:600px){.panel{padding:18px;border-radius:14px}.egl-help{right:12px;bottom:12px;padding:11px 15px;font-size:14px}header a{padding:7px 12px}}
