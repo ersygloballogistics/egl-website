@@ -87,7 +87,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  card(x2,y,cw,ch,isQuote?'Request details':'Order reference');
  txt(pretty(job.service_type)||'Logistics services',x2+5,y+14,10,true);
  const kv=(k,v,yy)=>{txt(k,x2+5,yy,6.5,true,MUTED);txt(wrap(v,cw-30,8.8).slice(0,1),x2+24,yy,8.8,false,NAVY)};
- kv('ROUTE',origin+'  >  '+destination,y+21);
+ if(job.service_type==='warehousing'){kv('LOCATION',(job.destination||job.request_details?.location||'Not specified'),y+21)}else if(job.origin||job.destination){kv('ROUTE',origin+'  >  '+destination,y+21)}else{kv('ROUTE','Not specified',y+21)}
  kv('REFERENCE',job.reference||'—',y+26.5);
  if(!isQuote)kv('QUOTATION',(job.reference||'—')+(job.quote_status?' ('+String(job.quote_status).replace(/_/g,' ')+')':''),y+32);
  y+=ch+9;
