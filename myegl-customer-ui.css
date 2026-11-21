@@ -2,12 +2,12 @@
 body.egl-customer main{max-width:960px}
 body.egl-customer #dashboard{background:transparent;border:0;box-shadow:none;padding:0}
 body.egl-customer #dashboard>h2{display:none}
-body.egl-customer #profileMsg{margin:0 0 18px;padding:16px 20px;border-radius:14px;background:#e3f6f5;border:1px solid #b7e4e2;color:#075c5e;font-weight:600}
+body.egl-customer #profileMsg{margin:0 0 18px;padding:16px 20px;border-radius:14px;background:#fbf4e1;border:1px solid #ecd9a8;color:#8a6212;font-weight:600}
 body.egl-customer #profileMsg:empty{display:none}
 body.egl-customer #rfqArea>h3{font-size:24px;margin:6px 0 4px}
 body.egl-customer #rfqArea>p.muted{margin:0 0 14px}
-body.egl-customer #rfqArea a[href="/services/"]{display:inline-block;background:#008f91;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:10px;margin:2px 0 18px}
-body.egl-customer #rfqArea a[href="/services/"]:hover{background:#007e88}
+body.egl-customer #rfqArea a[href="/services/"]{display:inline-block;background:#c4912a;color:#0b2239;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:10px;margin:2px 0 18px}
+body.egl-customer #rfqArea a[href="/services/"]:hover{background:#8a6212}
 /* attention banner */
 .egl-attention{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 20px;padding:18px 22px;border-radius:14px;background:#fff7e6;border:1px solid #f0cd86}
 .egl-attention strong{display:block;font-size:18px;color:#6b4705}
@@ -17,7 +17,7 @@ body.egl-customer #rfqArea a[href="/services/"]:hover{background:#007e88}
 body.egl-customer #jobs>.job,body.egl-customer #myRfqs>.job{border:1px solid #dce6ec;border-radius:16px;background:#fff;padding:0;margin:0 0 18px;overflow:hidden;box-shadow:0 4px 14px #102a4308}
 .egl-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:20px 22px 6px;flex-wrap:wrap}
 .egl-card-head a{font-size:20px;font-weight:800;color:#0b2239;text-decoration:none}
-.egl-card-head a:hover{color:#007e88;text-decoration:underline}
+.egl-card-head a:hover{color:#8a6212;text-decoration:underline}
 .egl-service{margin-top:3px;color:#5b6f7f;font-size:14px}
 .egl-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;padding:12px 22px 4px}
 .egl-fact small{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#5b6f7f;font-weight:700}
@@ -36,10 +36,10 @@ body.egl-customer #jobs>.job,body.egl-customer #myRfqs>.job{border:1px solid #dc
 .egl-steps li:after{content:"";position:absolute;top:12px;left:calc(50% + 15px);right:calc(-50% + 15px);height:2px;background:#d6e2e9}
 .egl-steps li:last-child:after{display:none}
 .egl-steps li.done{color:#0a6a3c}
-.egl-steps li.done:before{background:#00a6a6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.500l4.500 4.500L19 7.500'/%3E%3C/svg%3E") center/16px no-repeat;border-color:#00a6a6}
-.egl-steps li.done:after{background:#00a6a6}
+.egl-steps li.done:before{background:#c4912a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.500l4.500 4.500L19 7.500'/%3E%3C/svg%3E") center/16px no-repeat;border-color:#c4912a}
+.egl-steps li.done:after{background:#c4912a}
 .egl-steps li.current{color:#0b2239}
-.egl-steps li.current:before{background:#fff;border-color:#008f91;box-shadow:0 0 0 4px #00a6a62b}
+.egl-steps li.current:before{background:#fff;border-color:#c4912a;box-shadow:0 0 0 4px #c4912a2b}
 /* body */
 .egl-card-body{display:flex;flex-wrap:wrap;gap:10px;padding:14px 22px 22px;align-items:center}
 .egl-card-body>*{margin:0}
@@ -48,14 +48,14 @@ body.egl-customer #jobs>.job,body.egl-customer #myRfqs>.job{border:1px solid #dc
 .egl-card-body details>summary{font-weight:700;cursor:pointer;color:#0b2239}
 .egl-card-body details[open]>summary{margin-bottom:8px}
 .egl-card-body button{border-radius:10px;padding:12px 20px;font-weight:700;font-size:15px;cursor:pointer;border:2px solid transparent}
-.egl-card-body button.egl-primary{background:#008f91;color:#fff;border-color:#008f91}
-.egl-card-body button.egl-primary:hover{background:#007e88}
+.egl-card-body button.egl-primary{background:#c4912a;color:#0b2239;border-color:#c4912a}
+.egl-card-body button.egl-primary:hover{background:#8a6212}
 .egl-card-body button.egl-decline{background:#fff;color:#a4281d;border-color:#e3b3ae}
 .egl-card-body button.egl-decline:hover{background:#fde3e1}
-.egl-card-body button.egl-link{background:transparent;color:#007e88;border-color:transparent;text-decoration:underline;padding-left:6px;padding-right:6px}
+.egl-card-body button.egl-link{background:transparent;color:#8a6212;border-color:transparent;text-decoration:underline;padding-left:6px;padding-right:6px}
 .egl-card-body button.egl-pdf{background:#0b2239;color:#fff;border-color:#0b2239}
-a.egl-paylink{display:inline-block;background:#008f91;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:10px}
-a.egl-paylink:hover{background:#007e88}
+a.egl-paylink{display:inline-block;background:#c4912a;color:#0b2239;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:10px}
+a.egl-paylink:hover{background:#8a6212}
 .egl-card-body>p:has(>a.egl-paylink){flex-basis:auto}
 @media(max-width:560px){
  .egl-card-head,.egl-facts,.egl-steps,.egl-card-body{padding-left:16px;padding-right:16px}
@@ -64,18 +64,18 @@ a.egl-paylink:hover{background:#007e88}
  .egl-attention{padding:16px}.egl-attention button{width:100%}
 }
 /* pay button, receipt, empty state, help */
-a.egl-payinvoice{font-size:16px;padding:14px 26px;box-shadow:0 6px 16px #008f9133}
+a.egl-payinvoice{font-size:16px;padding:14px 26px;box-shadow:0 6px 16px #c4912a33}
 .egl-card-body button.egl-receipt{background:#fff;color:#0a6a3c;border-color:#b5dcc4}
 .egl-card-body button.egl-receipt:hover{background:#eef8f1}
 .egl-empty{display:flex;flex-direction:column;align-items:flex-start;gap:12px;background:#f3f8fa;border:1px solid #dce6ec;border-radius:16px;padding:26px 24px}
 .egl-empty strong{font-size:20px;color:#0b2239}
 .egl-empty span{display:block;text-align:left;text-indent:0;color:#354a59;line-height:1.5;max-width:560px}
-a.egl-empty-btn{background:#008f91;color:#fff;text-decoration:none;font-weight:700;padding:13px 24px;border-radius:10px}
-a.egl-empty-btn:hover{background:#007e88}
-a.egl-empty-link{color:#007e88;font-weight:600}
+a.egl-empty-btn{background:#c4912a;color:#0b2239;text-decoration:none;font-weight:700;padding:13px 24px;border-radius:10px}
+a.egl-empty-btn:hover{background:#8a6212}
+a.egl-empty-link{color:#8a6212;font-weight:600}
 .egl-help{position:fixed;right:18px;bottom:18px;z-index:40;display:none;align-items:center;gap:8px;background:#0b2239;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:12px 18px;border-radius:999px;box-shadow:0 8px 22px #0b223940}
 .egl-help:hover{background:#12314a}
 body.egl-customer .egl-help{display:inline-flex}
 .egl-help:before{content:"";width:9px;height:9px;border-radius:50%;background:#2fd37a}
 @media(max-width:560px){.egl-help{right:12px;bottom:12px;padding:11px 15px;font-size:14px}}
-.egl-fact a.egl-track{color:#007e88;font-weight:700;text-decoration:underline;word-break:break-all}
+.egl-fact a.egl-track{color:#8a6212;font-weight:700;text-decoration:underline;word-break:break-all}
