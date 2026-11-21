@@ -68,7 +68,7 @@
  function emptyNote(){const only=rfqBox.children.length===1&&rfqBox.firstElementChild.tagName==='P';rfqBox.hidden=only&&!!jobsBox.querySelector('.job,.egl-empty')}
  function help(){if(document.getElementById('eglHelp'))return;const a=make('a','egl-help','Need help? WhatsApp us');a.id='eglHelp';a.href='https://wa.me/971556581004?text='+encodeURIComponent('Hello ERSY GLOBAL, I need help with my MyEGL account.');a.target='_blank';a.rel='noopener noreferrer';document.body.append(a)}
  function run(){help();document.body.classList.toggle('egl-customer',!area.classList.contains('hidden'));
-  for(const c of jobsBox.querySelectorAll(':scope>.job'))enhanceJob(c);
+  for(const c of jobsBox.querySelectorAll(':scope>.job,:scope>.closed-shipments>.job'))enhanceJob(c);
   for(const c of rfqBox.querySelectorAll(':scope>.job'))enhanceRfq(c);
   banner();emptyNote()}
  const mo=new MutationObserver(run);mo.observe(jobsBox,{childList:true});mo.observe(rfqBox,{childList:true});mo.observe(area,{attributes:true,attributeFilter:['class']});run();
