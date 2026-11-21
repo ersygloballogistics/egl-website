@@ -8,7 +8,12 @@ export async function createQuotationAttachment(job, issueDate) {
   pdf.registerFontkit(fontkit);
   const regular = await pdf.embedFont(regularFont);
   const bold = await pdf.embedFont(boldFont);
-  const navy = rgb(10/255,29/255,67/255), gold = rgb(227/255,166/255,43/255);
+  const navy = rgb(10/255,29/255,67/255), gold = rgb(196/255,145/255,42/255), goldDark = rgb(176/255,125/255,18/255);
+  let mark = null;
+  try {
+    const res = await fetch("https://www.ersygloballogistics.com/egl-mark.png");
+    if (res.ok) mark = await pdf.embedPng(new Uint8Array(await res.arrayBuffer()));
+  } catch (_) { mark = null; }
   const ink = rgb(.09,.13,.18), gray = rgb(.36,.41,.46), pale = rgb(.95,.96,.97);
   const width=595.28,height=841.89,left=42,right=553;
   // Standard PDF fonts support Latin characters. Normalize punctuation safely.
@@ -21,8 +26,17 @@ export async function createQuotationAttachment(job, issueDate) {
   const text=(value,x,top,size=10,font=regular,color=ink)=>page.drawText(clean(value),{x,y:height-top,size,font,color});
   function addPage(){
     page=pdf.addPage([width,height]);
-    text('ERSY GLOBAL',left,55,25,bold,navy);
-    text('LOGISTICS & SUPPLY CHAIN SOLUTIONS',left,72,8,regular,ink);
+    if (mark) {
+      const mh = 54, mw = mh * mark.width / mark.height;
+      page.drawImage(mark,{x:left,y:height-82,width:mw,height:mh});
+      const tx = left + mw + 12;
+      text('ERSY ',tx,56,25,bold,navy);
+      text('GLOBAL',tx+bold.widthOfTextAtSize('ERSY ',25),56,25,bold,goldDark);
+      text('L O G I S T I C S',tx,73,9,bold,navy);
+    } else {
+      text('ERSY GLOBAL',left,55,25,bold,navy);
+      text('LOGISTICS & SUPPLY CHAIN SOLUTIONS',left,72,8,regular,ink);
+    }
     page.drawLine({start:{x:left,y:height-88},end:{x:right,y:height-88},thickness:2,color:gold});
     text('QUOTATION',left,119,23,bold,navy);
     text(reference,left,139,10,bold,gray);

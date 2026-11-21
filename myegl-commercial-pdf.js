@@ -19,7 +19,7 @@ async function loadLogo(){
   const img=new Image();
   img.onload=()=>{try{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);resolve({data:c.toDataURL('image/png'),w:img.naturalWidth,h:img.naturalHeight})}catch{resolve(null)}};
   img.onerror=()=>resolve(null);
-  img.src='/egl-logo-pdf.png';
+  img.src='/egl-mark.png';
  });
 }
 
@@ -27,7 +27,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  await new Promise((ok,fail)=>{if(window.jspdf)return ok();const s=document.createElement('script');s.src='/vendor/jspdf.umd.min.js';s.onload=ok;s.onerror=()=>fail(new Error('PDF library failed to load'));document.head.append(s)});
  const {jsPDF}=window.jspdf;
  const pdf=new jsPDF({unit:'mm',format:'a4'});
- const NAVY=[11,34,57],TEAL=[0,166,166],TEALDK=[0,126,136],MUTED=[91,111,127],LINE=[220,230,236],SOFT=[243,248,250],WHITE=[255,255,255];
+ const NAVY=[11,34,57],TEAL=[196,145,42],TEALDK=[138,98,18],MUTED=[91,111,127],LINE=[220,230,236],SOFT=[243,248,250],WHITE=[255,255,255];
  const isQuote=kind==='quotation';
  const isPaid=!isQuote&&(record.status==='paid'||(Number(record.total)>0&&Number(record.amount_paid||0)>=Number(record.total)));
  const currency=record.currency||job.currency||'AED';
@@ -50,7 +50,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
  const pageTop=first=>{
   if(first){
    fill(NAVY);pdf.rect(0,0,210,3,'F');fill(TEAL);pdf.rect(0,0,67,3,'F');
-   if(logo){const lh=22,lw=lh*logo.w/logo.h;pdf.addImage(logo.data,'PNG',L,9,lw,lh)}else txt('ERSY GLOBAL',L,22,20,true,NAVY);
+   if(logo){const lh=20,lw=lh*logo.w/logo.h;pdf.addImage(logo.data,'PNG',L,9,lw,lh);const tx=L+lw+4;txt('ERSY ',tx,19,20,true,NAVY);txt('GLOBAL',tx+pdf.getTextWidth('ERSY '),19,20,true,TEALDK);txt('L O G I S T I C S',tx,25.5,7.5,true,NAVY)}else txt('ERSY GLOBAL',L,22,20,true,NAVY);
    txt(isQuote?'QUOTATION':isPaid?'PAID INVOICE':'INVOICE',R,24,27,true,NAVY,{align:'right'});
    txt(isQuote?'Prepared for your logistics request':isPaid?'Payment received. Thank you.':'Request for payment',R,31,8.5,false,MUTED,{align:'right'});
   }else{
@@ -99,7 +99,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   for(let i=0;i<services.length;i+=2){
    ensure(8);
    for(let k=0;k<2&&i+k<services.length;k++){
-    const x=L+k*(half+4);fill(TEAL);pdf.circle(x+2.3,y-1.1,2.1,'F');txt(String(i+k+1),x+2.3,y-.4,6,true,WHITE,{align:'center'});
+    const x=L+k*(half+4);fill(TEALDK);pdf.circle(x+2.3,y-1.1,2.1,'F');txt(String(i+k+1),x+2.3,y-.4,6,true,WHITE,{align:'center'});
     txt(wrap(services[i+k],half-8,9).slice(0,1),x+7,y,9);
    }
    y+=7.2;
@@ -145,7 +145,7 @@ export async function renderCommercialPDF(kind,record,job,mode='download'){
   ensure(40);
   txt('Subtotal',tx,y,9,false,MUTED);txt(money(subtotal),R-5,y,9,false,NAVY,{align:'right'});y+=6;
   txt('Amount paid',tx,y,9,false,MUTED);txt(money(paid),R-5,y,9,false,NAVY,{align:'right'});y+=5;
-  fill(isPaid?[21,128,61]:TEAL);pdf.roundedRect(tx-4,y,84,12,2,2,'F');if(isPaid){txt('PAID IN FULL',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(paid),R-4,y+8,13,true,WHITE,{align:'right'})}else{txt('BALANCE DUE',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(balance),R-4,y+8,13,true,WHITE,{align:'right'})}y+=12+10;
+  fill(isPaid?[21,128,61]:TEALDK);pdf.roundedRect(tx-4,y,84,12,2,2,'F');if(isPaid){txt('PAID IN FULL',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(paid),R-4,y+8,13,true,WHITE,{align:'right'})}else{txt('BALANCE DUE',tx,y+7.4,7.5,true,WHITE);txt(currency+' '+money(balance),R-4,y+8,13,true,WHITE,{align:'right'})}y+=12+10;
   if(isPaid){
    ensure(30);fill([236,248,240]);stroke([170,215,185]);pdf.roundedRect(L,y,W,22,2.5,2.5,'FD');
    txt('Payment received. This invoice is paid in full.',L+5,y+8,10,true,[21,100,55]);
