@@ -12,6 +12,9 @@ main{padding:40px 0 80px;scroll-margin-top:92px}.service[hidden]{display:none!im
 footer{background:#0a1f3a;color:#b9cbd4;padding:35px 0}footer a{color:#ecd9a8}footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 @media(max-width:850px){.service{grid-template-columns:1fr;gap:15px}.fields{grid-template-columns:1fr}.hero{padding:45px 0}nav{gap:10px}.jump{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.jump{grid-template-columns:1fr}.jump a{min-height:46px}}
 footer#contact{scroll-margin-top:100px}footer .contact-details{max-width:420px}footer .contact-details div{margin-top:8px;overflow-wrap:anywhere}footer .contact-details span{color:white;user-select:text}
+/* Navy hero fills the first screen; content stays at the top */
+.hero{min-height:calc(100vh - 78px);min-height:calc(100svh - 78px)}
+@media(max-width:600px){.hero{min-height:calc(100vh - 69px);min-height:calc(100svh - 69px)}}
 </style><style id="egl-ui-upgrade">
 :root{color-scheme:light;--egl-panel:#fff;--egl-ink:#102a43;--egl-border:#dbe5eb}
 header{z-index:1000;background:#fff}
