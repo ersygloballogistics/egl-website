@@ -376,7 +376,7 @@ const mount=header.querySelector('nav')||header.querySelector('.nav')||header;mo
 const scrim=document.createElement('div');scrim.className='egl-scrim';scrim.hidden=true;
 const drawer=document.createElement('nav');drawer.id='egl-mobile-nav';drawer.className='egl-drawer';drawer.setAttribute('aria-label','Mobile navigation');
 const close=document.createElement('button');close.type='button';close.className='egl-icon-button egl-close';close.textContent='✕';close.setAttribute('aria-label','Close menu');drawer.append(close);
-const links=[['Home','/'],['Services','/services/'],['Procurement & Sourcing','/services/#procurement'],['Freight Forwarding','/services/#freight'],['Buy For Me','/services/#buy-for-me'],['Shop & Ship','/services/#shop-ship'],['Warehousing','/services/#warehousing'],['About Us','/#about'],['Contact','/#contact'],['MyEGL Portal','/myegl/'],['Start Your Request','/services/']];
+const links=[['Home','/'],['Services','/services/'],['Procurement & Sourcing','/procurement-sourcing/'],['Freight Forwarding','/freight-forwarding/'],['Buy For Me','/buy-for-me/'],['Shop & Ship','/shop-and-ship/'],['Warehousing','/warehousing-fulfillment/'],['About Us','/#about'],['Contact','/#contact'],['MyEGL Portal','/myegl/'],['Start Your Request','/services/']];
 links.forEach(([name,url])=>{const a=document.createElement('a');a.href=url;a.textContent=name;drawer.append(a)});
 document.body.append(scrim,drawer);
 const toggle=open=>{drawer.dataset.open=String(open);scrim.hidden=!open;menu.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';if(open)close.focus();else menu.focus()};
